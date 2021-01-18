@@ -22,6 +22,17 @@ public class ClubSnapshotEntity {
 	@JoinColumn(name = "club_id")
 	private ClubEntity club;
 
+	public ClubSnapshotEntity() {
+		super();
+	}
+	
+	public ClubSnapshotEntity(Long id, ClubEntity club) {
+		super();
+		this.id = id;
+		this.dateCreated = LocalDate.now();
+		this.club = club;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -71,4 +82,8 @@ public class ClubSnapshotEntity {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "ClubSnapshotEntity [id=" + id + ", dateCreated=" + dateCreated + ", club=" + club + "]";
+	}
 }
