@@ -11,43 +11,35 @@ public class PlayerEntity {
 	@GeneratedValue
 	private Long id;
 
-	private String comunioId;
-
 	private String name;
 
-//	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//	@JoinColumn(name = "player_id")
-//	private Set<PlayerSnapshotEntity> playerSnapshots;
+	private String comunioId;
 
 	public PlayerEntity() {
 		//
 	}
 
-	public PlayerEntity(final String comunioId, final String name) {
+	public PlayerEntity(final String name, final String comunioId) {
 		super();
-		this.comunioId = comunioId;
 		this.name = name;
+		this.comunioId = comunioId;
 	}
 
-	public PlayerEntity(final PlayerEntity player) {
-		this(player.comunioId, player.name);
-	}
-
-	public String getName() {
-		return name;
+	public PlayerEntity(final PlayerEntity playerEntity) {
+		this(playerEntity.name, playerEntity.comunioId);
 	}
 
 	public Long getId() {
 		return id;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	public String getComunioId() {
 		return comunioId;
 	}
-
-//	public Set<PlayerSnapshotEntity> getPlayerSnapshots() {
-//		return playerSnapshots;
-//	}
 
 	@Override
 	public int hashCode() {
@@ -56,7 +48,6 @@ public class PlayerEntity {
 		result = prime * result + ((comunioId == null) ? 0 : comunioId.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-//		result = prime * result + ((playerSnapshots == null) ? 0 : playerSnapshots.hashCode());
 		return result;
 	}
 
@@ -84,11 +75,12 @@ public class PlayerEntity {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-//		if (playerSnapshots == null) {
-//			if (other.playerSnapshots != null)
-//				return false;
-//		} else if (!playerSnapshots.equals(other.playerSnapshots))
-//			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "PlayerEntity [id=" + id + ", comunioId=" + comunioId + ", name=" + name + "]";
+	}
+
 }

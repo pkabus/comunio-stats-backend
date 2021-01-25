@@ -42,6 +42,17 @@ public class PlayerSnapshotEntity {
 		this.position = position;
 	}
 
+	public PlayerSnapshotEntity(Long id, PlayerEntity playerEntity, Long marketValue, Integer points,
+			LocalDate dateCreated, String position) {
+		super();
+		this.id = id;
+		this.player = playerEntity;
+		this.marketValue = marketValue;
+		this.points = points;
+		this.dateCreated = dateCreated;
+		this.position = position;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -65,7 +76,7 @@ public class PlayerSnapshotEntity {
 	public String getPosition() {
 		return position;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -113,6 +124,12 @@ public class PlayerSnapshotEntity {
 		} else if (!position.equals(other.position))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "PlayerSnapshotEntity [id=" + id + ", player=" + player + ", marketValue=" + marketValue + ", points="
+				+ points + ", dateCreated=" + dateCreated + ", position=" + position + "]";
 	}
 
 }

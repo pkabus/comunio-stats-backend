@@ -8,5 +8,5 @@ public interface ClubService {
 
 	Optional<ClubEntity> findById(final Long id);
 
-	ClubEntity save(ClubEntity club);
+	ClubEntity save(final ClubEntity club);
 }

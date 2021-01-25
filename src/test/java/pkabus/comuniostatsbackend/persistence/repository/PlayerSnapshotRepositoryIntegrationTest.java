@@ -34,7 +34,7 @@ public class PlayerSnapshotRepositoryIntegrationTest {
 		playerSnapshotRepository.save(playerSnapshotEntity);
 
 		Page<PlayerSnapshotEntity> retrievedPlayerSnapshots = playerSnapshotRepository
-				.findByPlayerId(playerEntity.getId(), PageRequest.of(0, 1));
+				.findByPlayerId(playerEntity.getId(), PageRequest.of(0, 10));
 
 		assertThat(retrievedPlayerSnapshots).containsExactly(playerSnapshotEntity);
 	}

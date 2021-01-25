@@ -1,7 +1,6 @@
 package pkabus.comuniostatsbackend.persistence.repository;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,9 +10,13 @@ import pkabus.comuniostatsbackend.persistence.model.PlayerSnapshotEntity;
 
 public interface PlayerSnapshotRepository extends PagingAndSortingRepository<PlayerSnapshotEntity, Long> {
 
-	Page<PlayerSnapshotEntity> findByPlayerId(Long playerId, Pageable pageable);
+	Page<PlayerSnapshotEntity> findByPlayerId(final Long playerId, final Pageable pageable);
 
-	List<PlayerSnapshotEntity> findByDateCreated(LocalDate date);
+	Page<PlayerSnapshotEntity> findByDateCreated(final LocalDate date, final Pageable pageable);
 
-	List<PlayerSnapshotEntity> findByDateCreatedBetween(LocalDate start, LocalDate end);
+	Page<PlayerSnapshotEntity> findByDateCreatedBetween(final LocalDate start, final LocalDate end,
+			final Pageable pageable);
+
+	Page<PlayerSnapshotEntity> findByPlayerIdAndDateCreatedBetween(final Long id, final LocalDate start,
+			final LocalDate end, Pageable pageable);
 }

@@ -18,32 +18,32 @@ public class PlayerRepositoryIntegrationTest {
 
 	@Autowired
 	private PlayerRepository playerRepository;
-	
+
 	@Test
 	void whenSavingNewPlayer_thenSuccess() {
 		PlayerEntity player = new PlayerEntity(randomAlphabetic(6), randomAlphabetic(6));
-		
+
 		assertNotNull(playerRepository.save(player));
 	}
-	
+
 	@Test
 	void givenPlayer_whenFindById_thenSuccess() {
 		PlayerEntity player = new PlayerEntity(randomAlphabetic(6), randomAlphabetic(6));
 		playerRepository.save(player);
-		
+
 		Optional<PlayerEntity> retrievedPlayer = playerRepository.findById(player.getId());
-		
+
 		assertEquals(retrievedPlayer.get(), player);
 	}
-	
+
 	@Test
 	void givenPlayer_whenFindByName_thenSuccess() {
 		PlayerEntity player = new PlayerEntity(randomAlphabetic(6), randomAlphabetic(6));
 		playerRepository.save(player);
-		
+
 		List<PlayerEntity> retrievedPlayer = playerRepository.findByName(player.getName());
-		
+
 		assertEquals(retrievedPlayer.get(0), player);
 	}
-	
+
 }

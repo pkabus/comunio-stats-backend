@@ -3,6 +3,7 @@ package pkabus.comuniostatsbackend;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 import java.time.LocalDate;
+import java.util.Random;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,6 @@ import pkabus.comuniostatsbackend.persistence.repository.PlayerSnapshotRepositor
 @Component
 public class RepositoryTestDataLoader implements ApplicationContextAware {
 
-	static final String LINK_FROM_COMUNIO = "link/from/comunio";
-
-	static final String TEST_PLAYER_000 = "testPlayer_000";
-
 	@Autowired
 	private PlayerRepository playerRepository;
 
@@ -30,19 +27,19 @@ public class RepositoryTestDataLoader implements ApplicationContextAware {
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		PlayerEntity playerEntity = new PlayerEntity(TEST_PLAYER_000, LINK_FROM_COMUNIO);
+		PlayerEntity playerEntity = new PlayerEntity(randomAlphabetic(6), randomAlphabetic(6));
 		playerRepository.save(playerEntity);
 
-		playerSnapshotRepository.save(new PlayerSnapshotEntity(playerEntity, Long.valueOf(160000), Integer.valueOf(0),
-				LocalDate.now(), randomAlphabetic(6)));
+		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity,
+				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6)));
 
-		playerSnapshotRepository.save(new PlayerSnapshotEntity(playerEntity, Long.valueOf(160000), Integer.valueOf(0),
-				LocalDate.now(), randomAlphabetic(6)));
+		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity,
+				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6)));
 
-		playerSnapshotRepository.save(new PlayerSnapshotEntity(playerEntity, Long.valueOf(160000), Integer.valueOf(0),
-				LocalDate.now(), randomAlphabetic(6)));
+		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity,
+				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6)));
 
-		playerSnapshotRepository.save(new PlayerSnapshotEntity(playerEntity, Long.valueOf(160000), Integer.valueOf(0),
-				LocalDate.now(), randomAlphabetic(6)));
+		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity,
+				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6)));
 	}
 }

@@ -10,6 +10,6 @@ import pkabus.comuniostatsbackend.persistence.model.ClubEntity;
 public interface ClubRepository extends PagingAndSortingRepository<ClubEntity, Long> {
 
 	@Query("select c from ClubEntity c where c.name like %?1%")
-	List<ClubEntity> findByNameMatches(String name);
-	
+	List<ClubEntity> findByNameMatches(final String name);
+
 }

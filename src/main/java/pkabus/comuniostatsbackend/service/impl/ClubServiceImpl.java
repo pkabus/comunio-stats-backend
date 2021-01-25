@@ -13,7 +13,7 @@ public class ClubServiceImpl implements ClubService {
 
 	private ClubRepository clubRepo;
 
-	public ClubServiceImpl(ClubRepository clubRepo) {
+	public ClubServiceImpl(final ClubRepository clubRepo) {
 		this.clubRepo = clubRepo;
 	}
 
