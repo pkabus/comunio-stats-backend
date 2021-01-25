@@ -1,0 +1,31 @@
+version: '3.1'
+services:
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - mysql_db:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_comunio
+      MYSQL_USER: mysqluser
+      MYSQL_PASSWORD: 123456
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      interval: 2s
+      retries: 10
+      
+  comunio-stats-backend:
+    image: comunio-stats-backend:0.0.1-SNAPSHOT
+    restart: on-failure
+    depends_on: 
+      - "mysql"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/db_comunio?allowPublicKeyRetrieval=true&useSSL=false
+
+volumes:
+  mysql_db:
