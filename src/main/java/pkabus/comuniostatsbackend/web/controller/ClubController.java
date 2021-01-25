@@ -1,5 +1,6 @@
 package pkabus.comuniostatsbackend.web.controller;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +20,12 @@ public class ClubController {
 
 	private ClubService clubService;
 
-	public ClubController(ClubService clubService) {
+	private ModelMapper modelMapper;
+
+	public ClubController(final ClubService clubService, final ModelMapper modelMapper) {
 		super();
 		this.clubService = clubService;
+		this.modelMapper = modelMapper;
 	}
 
 	@GetMapping(value = "/{id}")
@@ -36,11 +40,11 @@ public class ClubController {
 		clubService.save(toEntity(club));
 	}
 
-	private static ClubDto toDto(ClubEntity clubEntity) {
-		return new ClubDto(clubEntity.getId(), clubEntity.getName());
+	private ClubDto toDto(ClubEntity clubEntity) {
+		return modelMapper.map(clubEntity, ClubDto.class);
 	}
 
-	private static ClubEntity toEntity(ClubDto clubDto) {
-		return new ClubEntity(clubDto.getId(), clubDto.getName());
+	private ClubEntity toEntity(ClubDto clubDto) {
+		return modelMapper.map(clubDto, ClubEntity.class);
 	}
 }

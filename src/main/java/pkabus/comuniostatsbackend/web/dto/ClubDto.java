@@ -10,9 +10,8 @@ public class ClubDto {
 		super();
 	}
 
-	public ClubDto(Long id, String name) {
+	public ClubDto(String name) {
 		super();
-		this.id = id;
 		this.name = name;
 	}
 

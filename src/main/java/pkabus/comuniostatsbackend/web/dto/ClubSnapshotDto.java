@@ -14,9 +14,8 @@ public class ClubSnapshotDto {
 		super();
 	}
 
-	public ClubSnapshotDto(Long id, LocalDate dateCreated, ClubDto club) {
+	public ClubSnapshotDto(LocalDate dateCreated, ClubDto club) {
 		super();
-		this.id = id;
 		this.dateCreated = dateCreated;
 		this.club = club;
 	}
