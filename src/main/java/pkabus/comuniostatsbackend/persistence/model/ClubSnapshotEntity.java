@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 public class ClubSnapshotEntity {
 
@@ -20,12 +23,13 @@ public class ClubSnapshotEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "club_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private ClubEntity club;
 
 	public ClubSnapshotEntity() {
 		super();
 	}
-	
+
 	public ClubSnapshotEntity(Long id, ClubEntity club) {
 		super();
 		this.id = id;

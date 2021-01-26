@@ -7,11 +7,17 @@ import pkabus.comuniostatsbackend.persistence.model.PlayerEntity;
 
 public interface PlayerService {
 
-	Optional<PlayerEntity> findById(final Long id);
+	Optional<PlayerEntity> findById(Long id);
 
-	PlayerEntity save(final PlayerEntity club);
+	PlayerEntity save(PlayerEntity club);
 
-	List<PlayerEntity> findByName(final String name);
+	List<PlayerEntity> findByName(String name);
 
-	Optional<PlayerEntity> findByComunioId(final String comunioId);
+	Optional<PlayerEntity> findByComunioId(String comunioId);
+
+	Iterable<PlayerEntity> findAll();
+
+	void delete(PlayerEntity player);
+
+	void deleteAll();
 }

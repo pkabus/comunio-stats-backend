@@ -2,6 +2,7 @@ package pkabus.comuniostatsbackend.web.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -31,6 +33,13 @@ public class PlayerController {
 		this.modelMapper = modelMapper;
 	}
 
+	@GetMapping(value = "/all")
+	public List<PlayerDto> all() {
+		return StreamSupport.stream(playerService.findAll().spliterator(), false) //
+				.map(this::toDto) //
+				.collect(Collectors.toList());
+	}
+
 	@GetMapping(value = "/{id}")
 	public PlayerDto byId(@PathVariable final Long id) {
 		PlayerEntity playerEntity = playerService.findById(id)
@@ -38,16 +47,16 @@ public class PlayerController {
 		return toDto(playerEntity);
 	}
 
-	@GetMapping("/byName={name}")
-	public List<PlayerDto> byName(@PathVariable final String name) {
+	@GetMapping(params = "name")
+	public List<PlayerDto> byName(@RequestParam final String name) {
 		return playerService.findByName(name) //
 				.stream() //
 				.map(this::toDto) //
 				.collect(Collectors.toList());
 	}
 
-	@GetMapping("/byComunioId={comunioId}")
-	public PlayerDto byComunioId(@PathVariable final String comunioId) {
+	@GetMapping(params = "comunioId")
+	public PlayerDto byComunioId(@RequestParam final String comunioId) {
 		PlayerEntity playerEntity = playerService.findByComunioId(comunioId)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 		return toDto(playerEntity);
@@ -57,6 +66,15 @@ public class PlayerController {
 	public void create(@RequestBody final PlayerDto player) {
 		playerService.save(toEntity(player));
 	}
+	
+	
+	public void delete(final PlayerDto player) {
+		playerService.delete(toEntity(player));
+	}
+
+	public void deleteAll() {
+		playerService.deleteAll();
+	}
 
 	private PlayerDto toDto(final PlayerEntity playerEntity) {
 		return modelMapper.map(playerEntity, PlayerDto.class);
@@ -65,4 +83,5 @@ public class PlayerController {
 	private PlayerEntity toEntity(final PlayerDto playerDto) {
 		return modelMapper.map(playerDto, PlayerEntity.class);
 	}
+
 }

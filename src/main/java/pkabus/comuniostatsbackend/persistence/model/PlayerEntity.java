@@ -80,7 +80,7 @@ public class PlayerEntity {
 
 	@Override
 	public String toString() {
-		return "PlayerEntity [id=" + id + ", comunioId=" + comunioId + ", name=" + name + "]";
+		return "PlayerEntity [id=" + id + ", name=" + name + ", comunioId=" + comunioId + "]";
 	}
 
 }

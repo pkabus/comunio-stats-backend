@@ -73,7 +73,7 @@ public class PlayerDto {
 
 	@Override
 	public String toString() {
-		return "PlayerDto [id=" + id + ", comunioId=" + comunioId + ", name=" + name + "]";
+		return "PlayerDto [id=" + id + ", name=" + name + ", comunioId=" + comunioId + "]";
 	}
 
 }

@@ -1,6 +1,7 @@
 package pkabus.comuniostatsbackend.persistence.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -11,5 +12,7 @@ public interface ClubRepository extends PagingAndSortingRepository<ClubEntity, L
 
 	@Query("select c from ClubEntity c where c.name like %?1%")
 	List<ClubEntity> findByNameMatches(final String name);
+
+	Optional<ClubEntity> findByName(String name);
 
 }

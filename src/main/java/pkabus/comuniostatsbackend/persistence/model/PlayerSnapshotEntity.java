@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 public class PlayerSnapshotEntity {
 
@@ -18,6 +21,7 @@ public class PlayerSnapshotEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "player_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private PlayerEntity player;
 
 	private Long marketValue;

@@ -6,7 +6,15 @@ import pkabus.comuniostatsbackend.persistence.model.ClubEntity;
 
 public interface ClubService {
 
-	Optional<ClubEntity> findById(final Long id);
+	Iterable<ClubEntity> findAll();
 
-	ClubEntity save(final ClubEntity club);
+	Optional<ClubEntity> findById(Long id);
+
+	ClubEntity save(ClubEntity club);
+
+	Optional<ClubEntity> findByName(String name);
+
+	void deleteAll();
+
+	void delete(ClubEntity entity);
 }
