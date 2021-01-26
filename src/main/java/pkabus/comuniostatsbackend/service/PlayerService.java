@@ -20,4 +20,6 @@ public interface PlayerService {
 	void delete(PlayerEntity player);
 
 	void deleteAll();
+
+	void deleteByComunioId(String byComunioId);
 }

@@ -57,4 +57,10 @@ public class ClubServiceImpl implements ClubService {
 		clubRepo.delete(entity);
 	}
 
+	@Override
+	public void deleteByName(String name) {
+		clubRepo.findByName(name).ifPresentOrElse(clubRepo::delete,
+				() -> logger.info(String.format("Club '%s' not found. Cannot be deleted.", name)));
+	}
+
 }

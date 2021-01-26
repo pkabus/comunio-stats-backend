@@ -17,4 +17,6 @@ public interface ClubService {
 	void deleteAll();
 
 	void delete(ClubEntity entity);
+
+	void deleteByName(String name);
 }

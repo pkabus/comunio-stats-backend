@@ -1,6 +1,7 @@
 package pkabus.comuniostatsbackend.web.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.server.ResponseStatusException;
 
 import pkabus.comuniostatsbackend.web.dto.PlayerDto;
 import pkabus.comuniostatsbackend.web.dto.PlayerSnapshotDto;
@@ -51,5 +53,22 @@ public class PlayerControllerIntegrationTest {
 		List<PlayerSnapshotDto> byPlayerId = playerSnapshotController.byPlayerId(playerDtoByComunioId.getId());
 
 		assertThat(byPlayerId).usingElementComparatorIgnoringFields("id").containsExactly(playerSnapshotDto);
+	}
+
+	@Test
+	void givenPlayer_deleteByComunioId_thenSuccess() {
+		String name = randomAlphabetic(6);
+		String comunioId = randomAlphabetic(6);
+		PlayerDto playerDto = new PlayerDto(name, comunioId);
+		playerController.create(playerDto);
+
+		PlayerDto byComunioIdBefore = playerController.byComunioId(comunioId);
+		assertThat(byComunioIdBefore).usingRecursiveComparison() //
+				.ignoringFields("id").isEqualTo(playerDto);
+
+		playerController.deleteByComunioId(comunioId);
+
+		assertThatThrownBy(() -> playerController.byComunioId(comunioId)) //
+				.isInstanceOf(ResponseStatusException.class);
 	}
 }

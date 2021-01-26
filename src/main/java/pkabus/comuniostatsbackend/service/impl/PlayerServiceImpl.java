@@ -55,6 +55,12 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
+	public void deleteByComunioId(final String byComunioId) {
+		playerRepo.findByComunioId(byComunioId).ifPresentOrElse(playerRepo::delete, () -> logger
+				.info(String.format("Player with comunioId '%s' not found. Cannot be deleted.", byComunioId)));
+	}
+
+	@Override
 	public List<PlayerEntity> findByName(final String name) {
 		return playerRepo.findByName(name);
 	}

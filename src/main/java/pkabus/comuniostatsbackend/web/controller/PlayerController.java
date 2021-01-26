@@ -6,6 +6,7 @@ import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,8 +67,12 @@ public class PlayerController {
 	public void create(@RequestBody final PlayerDto player) {
 		playerService.save(toEntity(player));
 	}
-	
-	
+
+	@DeleteMapping(value = "/delete", params = "byComunioId")
+	public void deleteByComunioId(@RequestParam final String byComunioId) {
+		playerService.deleteByComunioId(byComunioId);
+	}
+
 	public void delete(final PlayerDto player) {
 		playerService.delete(toEntity(player));
 	}
