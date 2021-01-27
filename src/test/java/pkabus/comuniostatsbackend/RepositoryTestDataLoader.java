@@ -11,8 +11,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import pkabus.comuniostatsbackend.persistence.model.ClubEntity;
 import pkabus.comuniostatsbackend.persistence.model.PlayerEntity;
 import pkabus.comuniostatsbackend.persistence.model.PlayerSnapshotEntity;
+import pkabus.comuniostatsbackend.persistence.repository.ClubRepository;
 import pkabus.comuniostatsbackend.persistence.repository.PlayerRepository;
 import pkabus.comuniostatsbackend.persistence.repository.PlayerSnapshotRepository;
 
@@ -23,6 +25,9 @@ public class RepositoryTestDataLoader implements ApplicationContextAware {
 	private PlayerRepository playerRepository;
 
 	@Autowired
+	private ClubRepository clubRepository;
+
+	@Autowired
 	private PlayerSnapshotRepository playerSnapshotRepository;
 
 	@Override
@@ -30,16 +35,19 @@ public class RepositoryTestDataLoader implements ApplicationContextAware {
 		PlayerEntity playerEntity = new PlayerEntity(randomAlphabetic(6), randomAlphabetic(6));
 		playerRepository.save(playerEntity);
 
-		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity,
+		ClubEntity clubEntity = new ClubEntity(new Random().nextLong(), randomAlphabetic(6));
+		clubRepository.save(clubEntity);
+
+		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity, clubEntity,
 				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6)));
 
-		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity,
+		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity, clubEntity,
 				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6)));
 
-		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity,
+		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity, clubEntity,
 				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6)));
 
-		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity,
+		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity, clubEntity,
 				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6)));
 	}
 }

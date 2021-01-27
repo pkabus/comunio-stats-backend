@@ -13,7 +13,7 @@ public interface PlayerService {
 
 	List<PlayerEntity> findByName(String name);
 
-	Optional<PlayerEntity> findByComunioId(String comunioId);
+	Optional<PlayerEntity> findByLink(String link);
 
 	Iterable<PlayerEntity> findAll();
 

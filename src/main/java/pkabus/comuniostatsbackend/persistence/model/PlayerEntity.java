@@ -13,20 +13,20 @@ public class PlayerEntity {
 
 	private String name;
 
-	private String comunioId;
+	private String link;
 
 	public PlayerEntity() {
 		//
 	}
 
-	public PlayerEntity(final String name, final String comunioId) {
+	public PlayerEntity(final String name, final String link) {
 		super();
 		this.name = name;
-		this.comunioId = comunioId;
+		this.link = link;
 	}
 
 	public PlayerEntity(final PlayerEntity playerEntity) {
-		this(playerEntity.name, playerEntity.comunioId);
+		this(playerEntity.name, playerEntity.link);
 	}
 
 	public Long getId() {
@@ -38,14 +38,14 @@ public class PlayerEntity {
 	}
 
 	public String getComunioId() {
-		return comunioId;
+		return link;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((comunioId == null) ? 0 : comunioId.hashCode());
+		result = prime * result + ((link == null) ? 0 : link.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
@@ -60,10 +60,10 @@ public class PlayerEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		PlayerEntity other = (PlayerEntity) obj;
-		if (comunioId == null) {
-			if (other.comunioId != null)
+		if (link == null) {
+			if (other.link != null)
 				return false;
-		} else if (!comunioId.equals(other.comunioId))
+		} else if (!link.equals(other.link))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -80,7 +80,7 @@ public class PlayerEntity {
 
 	@Override
 	public String toString() {
-		return "PlayerEntity [id=" + id + ", name=" + name + ", comunioId=" + comunioId + "]";
+		return "PlayerEntity [id=" + id + ", name=" + name + ", link=" + link + "]";
 	}
 
 }

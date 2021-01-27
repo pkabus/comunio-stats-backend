@@ -9,9 +9,9 @@ import pkabus.comuniostatsbackend.persistence.model.ClubSnapshotEntity;
 
 public interface ClubSnapshotService {
 
-	Optional<ClubSnapshotEntity> findById(final Long id);
+	Optional<ClubSnapshotEntity> findById(Long id);
 
-	Page<ClubSnapshotEntity> findByClubId(final Long id, final Pageable pageable);
+	Page<ClubSnapshotEntity> findByClubId(Long id, Pageable pageable);
 
-	ClubSnapshotEntity save(final ClubSnapshotEntity club);
+	ClubSnapshotEntity save(ClubSnapshotEntity club);
 }

@@ -34,7 +34,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public PlayerEntity save(final PlayerEntity player) {
-		Optional<PlayerEntity> playerByComunioId = playerRepo.findByComunioId(player.getComunioId());
+		Optional<PlayerEntity> playerByComunioId = playerRepo.findByLink(player.getComunioId());
 
 		if (playerByComunioId.isPresent()) {
 			logger.warn(String.format("Player '%s' with unique link '%s' is already present. Not created again.",
@@ -56,7 +56,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public void deleteByComunioId(final String byComunioId) {
-		playerRepo.findByComunioId(byComunioId).ifPresentOrElse(playerRepo::delete, () -> logger
+		playerRepo.findByLink(byComunioId).ifPresentOrElse(playerRepo::delete, () -> logger
 				.info(String.format("Player with comunioId '%s' not found. Cannot be deleted.", byComunioId)));
 	}
 
@@ -66,8 +66,8 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public Optional<PlayerEntity> findByComunioId(final String comunioId) {
-		return playerRepo.findByComunioId(comunioId);
+	public Optional<PlayerEntity> findByLink(final String comunioId) {
+		return playerRepo.findByLink(comunioId);
 	}
 
 }

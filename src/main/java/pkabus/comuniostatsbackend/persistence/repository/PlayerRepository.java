@@ -9,8 +9,8 @@ import pkabus.comuniostatsbackend.persistence.model.PlayerEntity;
 
 public interface PlayerRepository extends JpaRepository<PlayerEntity, Long> {
 
-	List<PlayerEntity> findByName(final String name);
+	List<PlayerEntity> findByName(String name);
 
-	Optional<PlayerEntity> findByComunioId(final String comunioId);
+	Optional<PlayerEntity> findByLink(String link);
 
 }

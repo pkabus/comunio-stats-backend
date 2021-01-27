@@ -14,31 +14,31 @@ import pkabus.comuniostatsbackend.service.PlayerSnapshotService;
 @Service
 public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
 
-	private PlayerSnapshotRepository playerSnapshotRepo;
+	private final PlayerSnapshotRepository playerSnapshotRepo;
 
 	public PlayerSnapshotServiceImpl(final PlayerSnapshotRepository playerSnapshotRepository) {
 		this.playerSnapshotRepo = playerSnapshotRepository;
 	}
 
 	@Override
-	public Optional<PlayerSnapshotEntity> findById(Long id) {
+	public Optional<PlayerSnapshotEntity> findById(final Long id) {
 		return playerSnapshotRepo.findById(id);
 	}
 
 	@Override
-	public Page<PlayerSnapshotEntity> findByPlayerId(Long id, Pageable pageable) {
+	public Page<PlayerSnapshotEntity> findByPlayerId(final Long id, final Pageable pageable) {
 		return playerSnapshotRepo.findByPlayerId(id, pageable);
 	}
 
 	@Override
-	public PlayerSnapshotEntity save(PlayerSnapshotEntity playerSnapshot) {
+	public PlayerSnapshotEntity save(final PlayerSnapshotEntity playerSnapshot) {
 		return playerSnapshotRepo.save(playerSnapshot);
 	}
 
 	@Override
-	public Page<PlayerSnapshotEntity> findByPlayerIdAndDateCreatedBetween(Long id, LocalDate start, LocalDate end,
-			Pageable pageable) {
-		return playerSnapshotRepo.findByPlayerIdAndDateCreatedBetween(id, start, end, pageable);
+	public Page<PlayerSnapshotEntity> findByPlayerIdAndDateCreatedBetween(final Long id, final LocalDate start,
+			final LocalDate end, final Pageable pageable) {
+		return playerSnapshotRepo.findByPlayerIdAndCreatedBetween(id, start, end, pageable);
 	}
 
 }

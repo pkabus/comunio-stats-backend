@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.OnDelete;
@@ -20,15 +19,18 @@ public class PlayerSnapshotEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "player_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private PlayerEntity player;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@OnDelete(action = OnDeleteAction.NO_ACTION)
+	private ClubEntity club;
+
 	private Long marketValue;
 
-	private Integer points;
+	private Integer pointsDuringCurrentSeason;
 
-	private LocalDate dateCreated;
+	private LocalDate created;
 
 	private String position;
 
@@ -36,24 +38,25 @@ public class PlayerSnapshotEntity {
 		super();
 	}
 
-	public PlayerSnapshotEntity(PlayerEntity playerEntity, Long marketValue, Integer points, LocalDate dateCreated,
-			String position) {
+	public PlayerSnapshotEntity(final PlayerEntity playerEntity, final ClubEntity club, final Long marketValue,
+			final Integer pointsDuringCurrentSeason, final LocalDate created, final String position) {
 		super();
 		this.player = playerEntity;
 		this.marketValue = marketValue;
-		this.points = points;
-		this.dateCreated = dateCreated;
+		this.pointsDuringCurrentSeason = pointsDuringCurrentSeason;
+		this.created = created;
 		this.position = position;
 	}
 
-	public PlayerSnapshotEntity(Long id, PlayerEntity playerEntity, Long marketValue, Integer points,
-			LocalDate dateCreated, String position) {
+	public PlayerSnapshotEntity(final Long id, final PlayerEntity playerEntity, final ClubEntity club,
+			final Long marketValue, final Integer pointsDuringCurrentSeason, final LocalDate created,
+			final String position) {
 		super();
 		this.id = id;
 		this.player = playerEntity;
 		this.marketValue = marketValue;
-		this.points = points;
-		this.dateCreated = dateCreated;
+		this.pointsDuringCurrentSeason = pointsDuringCurrentSeason;
+		this.created = created;
 		this.position = position;
 	}
 
@@ -65,16 +68,20 @@ public class PlayerSnapshotEntity {
 		return player;
 	}
 
+	public ClubEntity getClub() {
+		return club;
+	}
+
 	public Long getMarketValue() {
 		return marketValue;
 	}
 
-	public Integer getPoints() {
-		return points;
+	public Integer getPointsDuringCurrentSeason() {
+		return pointsDuringCurrentSeason;
 	}
 
-	public LocalDate getDateCreated() {
-		return dateCreated;
+	public LocalDate getCreated() {
+		return created;
 	}
 
 	public String getPosition() {
@@ -85,55 +92,85 @@ public class PlayerSnapshotEntity {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((dateCreated == null) ? 0 : dateCreated.hashCode());
+		result = prime * result + ((club == null) ? 0 : club.hashCode());
+		result = prime * result + ((created == null) ? 0 : created.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((marketValue == null) ? 0 : marketValue.hashCode());
-		result = prime * result + ((points == null) ? 0 : points.hashCode());
+		result = prime * result + ((player == null) ? 0 : player.hashCode());
+		result = prime * result + ((pointsDuringCurrentSeason == null) ? 0 : pointsDuringCurrentSeason.hashCode());
 		result = prime * result + ((position == null) ? 0 : position.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		PlayerSnapshotEntity other = (PlayerSnapshotEntity) obj;
-		if (dateCreated == null) {
-			if (other.dateCreated != null)
+		if (club == null) {
+			if (other.club != null) {
 				return false;
-		} else if (!dateCreated.equals(other.dateCreated))
+			}
+		} else if (!club.equals(other.club)) {
 			return false;
+		}
+		if (created == null) {
+			if (other.created != null) {
+				return false;
+			}
+		} else if (!created.equals(other.created)) {
+			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (marketValue == null) {
-			if (other.marketValue != null)
+			if (other.marketValue != null) {
 				return false;
-		} else if (!marketValue.equals(other.marketValue))
+			}
+		} else if (!marketValue.equals(other.marketValue)) {
 			return false;
-		if (points == null) {
-			if (other.points != null)
+		}
+		if (player == null) {
+			if (other.player != null) {
 				return false;
-		} else if (!points.equals(other.points))
+			}
+		} else if (!player.equals(other.player)) {
 			return false;
+		}
+		if (pointsDuringCurrentSeason == null) {
+			if (other.pointsDuringCurrentSeason != null) {
+				return false;
+			}
+		} else if (!pointsDuringCurrentSeason.equals(other.pointsDuringCurrentSeason)) {
+			return false;
+		}
 		if (position == null) {
-			if (other.position != null)
+			if (other.position != null) {
 				return false;
-		} else if (!position.equals(other.position))
+			}
+		} else if (!position.equals(other.position)) {
 			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "PlayerSnapshotEntity [id=" + id + ", player=" + player + ", marketValue=" + marketValue + ", points="
-				+ points + ", dateCreated=" + dateCreated + ", position=" + position + "]";
+		return "PlayerSnapshotEntity [id=" + id + ", player=" + player + ", club=" + club + ", marketValue="
+				+ marketValue + ", pointsDuringCurrentSeason=" + pointsDuringCurrentSeason + ", created=" + created
+				+ ", position=" + position + "]";
 	}
 
 }

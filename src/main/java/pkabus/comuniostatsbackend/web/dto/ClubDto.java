@@ -10,7 +10,7 @@ public class ClubDto {
 		super();
 	}
 
-	public ClubDto(String name) {
+	public ClubDto(final String name) {
 		super();
 		this.name = name;
 	}

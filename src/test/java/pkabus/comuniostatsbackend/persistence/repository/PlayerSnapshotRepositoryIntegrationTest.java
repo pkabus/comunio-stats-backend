@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import pkabus.comuniostatsbackend.persistence.model.ClubEntity;
 import pkabus.comuniostatsbackend.persistence.model.PlayerEntity;
 import pkabus.comuniostatsbackend.persistence.model.PlayerSnapshotEntity;
 
@@ -21,6 +23,9 @@ public class PlayerSnapshotRepositoryIntegrationTest {
 	private PlayerSnapshotRepository playerSnapshotRepository;
 
 	@Autowired
+	private ClubRepository clubRepository;
+
+	@Autowired
 	private PlayerRepository playerRepository;
 
 	@Test
@@ -28,8 +33,11 @@ public class PlayerSnapshotRepositoryIntegrationTest {
 		PlayerEntity playerEntity = new PlayerEntity(randomAlphabetic(6), randomAlphabetic(6));
 		playerRepository.save(playerEntity);
 
-		PlayerSnapshotEntity playerSnapshotEntity = new PlayerSnapshotEntity(playerEntity, Long.valueOf(160000),
-				Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6));
+		ClubEntity clubEntity = new ClubEntity(new Random().nextLong(), randomAlphabetic(6));
+		clubRepository.save(clubEntity);
+
+		PlayerSnapshotEntity playerSnapshotEntity = new PlayerSnapshotEntity(playerEntity, clubEntity,
+				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6));
 
 		playerSnapshotRepository.save(playerSnapshotEntity);
 

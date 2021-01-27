@@ -19,7 +19,7 @@ public class ClubSnapshotEntity {
 	@GeneratedValue
 	private Long id;
 
-	private LocalDate dateCreated;
+	private LocalDate created;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "club_id")
@@ -33,7 +33,7 @@ public class ClubSnapshotEntity {
 	public ClubSnapshotEntity(Long id, ClubEntity club) {
 		super();
 		this.id = id;
-		this.dateCreated = LocalDate.now();
+		this.created = LocalDate.now();
 		this.club = club;
 	}
 
@@ -41,8 +41,8 @@ public class ClubSnapshotEntity {
 		return id;
 	}
 
-	public LocalDate getDateCreated() {
-		return dateCreated;
+	public LocalDate getCreated() {
+		return created;
 	}
 
 	public ClubEntity getClub() {
@@ -54,7 +54,7 @@ public class ClubSnapshotEntity {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((club == null) ? 0 : club.hashCode());
-		result = prime * result + ((dateCreated == null) ? 0 : dateCreated.hashCode());
+		result = prime * result + ((created == null) ? 0 : created.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
@@ -73,10 +73,10 @@ public class ClubSnapshotEntity {
 				return false;
 		} else if (!club.equals(other.club))
 			return false;
-		if (dateCreated == null) {
-			if (other.dateCreated != null)
+		if (created == null) {
+			if (other.created != null)
 				return false;
-		} else if (!dateCreated.equals(other.dateCreated))
+		} else if (!created.equals(other.created))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -88,6 +88,6 @@ public class ClubSnapshotEntity {
 
 	@Override
 	public String toString() {
-		return "ClubSnapshotEntity [id=" + id + ", dateCreated=" + dateCreated + ", club=" + club + "]";
+		return "ClubSnapshotEntity [id=" + id + ", created=" + created + ", club=" + club + "]";
 	}
 }

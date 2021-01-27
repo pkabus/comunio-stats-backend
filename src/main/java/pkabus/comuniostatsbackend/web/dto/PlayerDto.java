@@ -6,20 +6,20 @@ public class PlayerDto {
 
 	private String name;
 
-	private String comunioId;
+	private String link;
 
 	public PlayerDto() {
 		//
 	}
 
-	public PlayerDto(final String name, final String comunioId) {
+	public PlayerDto(final String name, final String link) {
 		super();
 		this.name = name;
-		this.comunioId = comunioId;
+		this.link = link;
 	}
 
 	public PlayerDto(final PlayerDto player) {
-		this(player.name, player.comunioId);
+		this(player.name, player.link);
 	}
 
 	public String getName() {
@@ -30,15 +30,15 @@ public class PlayerDto {
 		return id;
 	}
 
-	public String getComunioId() {
-		return comunioId;
+	public String getLink() {
+		return link;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((comunioId == null) ? 0 : comunioId.hashCode());
+		result = prime * result + ((link == null) ? 0 : link.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
@@ -53,10 +53,10 @@ public class PlayerDto {
 		if (getClass() != obj.getClass())
 			return false;
 		PlayerDto other = (PlayerDto) obj;
-		if (comunioId == null) {
-			if (other.comunioId != null)
+		if (link == null) {
+			if (other.link != null)
 				return false;
-		} else if (!comunioId.equals(other.comunioId))
+		} else if (!link.equals(other.link))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -73,7 +73,7 @@ public class PlayerDto {
 
 	@Override
 	public String toString() {
-		return "PlayerDto [id=" + id + ", name=" + name + ", comunioId=" + comunioId + "]";
+		return "PlayerDto [id=" + id + ", name=" + name + ", link=" + link + "]";
 	}
 
 }

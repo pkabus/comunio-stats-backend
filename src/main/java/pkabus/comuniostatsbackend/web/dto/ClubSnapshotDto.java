@@ -6,7 +6,7 @@ public class ClubSnapshotDto {
 
 	private Long id;
 
-	private LocalDate dateCreated;
+	private LocalDate created;
 
 	private ClubDto club;
 
@@ -14,9 +14,9 @@ public class ClubSnapshotDto {
 		super();
 	}
 
-	public ClubSnapshotDto(LocalDate dateCreated, ClubDto club) {
+	public ClubSnapshotDto(final LocalDate created, final ClubDto club) {
 		super();
-		this.dateCreated = dateCreated;
+		this.created = created;
 		this.club = club;
 	}
 
@@ -24,8 +24,8 @@ public class ClubSnapshotDto {
 		return id;
 	}
 
-	public LocalDate getDateCreated() {
-		return dateCreated;
+	public LocalDate getCreated() {
+		return created;
 	}
 
 	public ClubDto getClub() {
@@ -37,7 +37,7 @@ public class ClubSnapshotDto {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((club == null) ? 0 : club.hashCode());
-		result = prime * result + ((dateCreated == null) ? 0 : dateCreated.hashCode());
+		result = prime * result + ((created == null) ? 0 : created.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
@@ -56,10 +56,10 @@ public class ClubSnapshotDto {
 				return false;
 		} else if (!club.equals(other.club))
 			return false;
-		if (dateCreated == null) {
-			if (other.dateCreated != null)
+		if (created == null) {
+			if (other.created != null)
 				return false;
-		} else if (!dateCreated.equals(other.dateCreated))
+		} else if (!created.equals(other.created))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -71,6 +71,6 @@ public class ClubSnapshotDto {
 
 	@Override
 	public String toString() {
-		return "ClubSnapshotDto [id=" + id + ", dateCreated=" + dateCreated + ", club=" + club + "]";
+		return "ClubSnapshotDto [id=" + id + ", created=" + created + ", club=" + club + "]";
 	}
 }

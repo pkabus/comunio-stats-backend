@@ -12,8 +12,8 @@ public interface ClubSnapshotRepository extends JpaRepository<ClubSnapshotEntity
 
 	Page<ClubSnapshotEntity> findByClubId(final Long clubId, final Pageable pageable);
 
-	Page<ClubSnapshotEntity> findByDateCreated(final LocalDate date, final Pageable pageable);
+	Page<ClubSnapshotEntity> findByCreated(final LocalDate date, final Pageable pageable);
 
-	Page<ClubSnapshotEntity> findByDateCreatedBetween(final LocalDate start, final LocalDate end,
+	Page<ClubSnapshotEntity> findByCreatedBetween(final LocalDate start, final LocalDate end,
 			final Pageable pageable);
 }

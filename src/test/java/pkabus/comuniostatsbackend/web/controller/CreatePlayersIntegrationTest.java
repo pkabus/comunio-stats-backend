@@ -34,8 +34,8 @@ public class CreatePlayersIntegrationTest {
 		players.forEach(playerController::create);
 
 		List<PlayerDto> dtosByComunioId = players.stream() //
-				.map(PlayerDto::getComunioId) //
-				.map(playerController::byComunioId) //
+				.map(PlayerDto::getLink) //
+				.map(playerController::byLink) //
 				.collect(Collectors.toList());
 
 		assertThat(dtosByComunioId).usingElementComparatorIgnoringFields("id").containsExactlyElementsOf(players);

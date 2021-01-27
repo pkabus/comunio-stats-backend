@@ -12,11 +12,11 @@ public interface PlayerSnapshotRepository extends JpaRepository<PlayerSnapshotEn
 
 	Page<PlayerSnapshotEntity> findByPlayerId(final Long playerId, final Pageable pageable);
 
-	Page<PlayerSnapshotEntity> findByDateCreated(final LocalDate date, final Pageable pageable);
+	Page<PlayerSnapshotEntity> findByCreated(final LocalDate date, final Pageable pageable);
 
-	Page<PlayerSnapshotEntity> findByDateCreatedBetween(final LocalDate start, final LocalDate end,
+	Page<PlayerSnapshotEntity> findByCreatedBetween(final LocalDate start, final LocalDate end,
 			final Pageable pageable);
 
-	Page<PlayerSnapshotEntity> findByPlayerIdAndDateCreatedBetween(final Long id, final LocalDate start,
+	Page<PlayerSnapshotEntity> findByPlayerIdAndCreatedBetween(final Long id, final LocalDate start,
 			final LocalDate end, Pageable pageable);
 }
