@@ -19,4 +19,6 @@ public interface PlayerSnapshotService {
 
 	PlayerSnapshotEntity save(PlayerSnapshotEntity playerSnapshot);
 
+	void deleteById(Long id);
+
 }

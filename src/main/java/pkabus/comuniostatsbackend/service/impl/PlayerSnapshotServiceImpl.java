@@ -41,4 +41,9 @@ public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
 		return playerSnapshotRepo.findByPlayerIdAndCreatedBetween(id, start, end, pageable);
 	}
 
+	@Override
+	public void deleteById(final Long id) {
+		playerSnapshotRepo.deleteById(id);
+	}
+
 }
