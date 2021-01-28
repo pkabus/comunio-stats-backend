@@ -38,22 +38,24 @@ public class PlayerSnapshotEntity {
 		super();
 	}
 
-	public PlayerSnapshotEntity(final PlayerEntity playerEntity, final ClubEntity club, final Long marketValue,
+	public PlayerSnapshotEntity(final PlayerEntity playerEntity, final ClubEntity clubEntity, final Long marketValue,
 			final Integer pointsDuringCurrentSeason, final LocalDate created, final String position) {
 		super();
 		this.player = playerEntity;
+		this.club = clubEntity;
 		this.marketValue = marketValue;
 		this.pointsDuringCurrentSeason = pointsDuringCurrentSeason;
 		this.created = created;
 		this.position = position;
 	}
 
-	public PlayerSnapshotEntity(final Long id, final PlayerEntity playerEntity, final ClubEntity club,
+	public PlayerSnapshotEntity(final Long id, final PlayerEntity playerEntity, final ClubEntity clubEntity,
 			final Long marketValue, final Integer pointsDuringCurrentSeason, final LocalDate created,
 			final String position) {
 		super();
 		this.id = id;
 		this.player = playerEntity;
+		this.club = clubEntity;
 		this.marketValue = marketValue;
 		this.pointsDuringCurrentSeason = pointsDuringCurrentSeason;
 		this.created = created;

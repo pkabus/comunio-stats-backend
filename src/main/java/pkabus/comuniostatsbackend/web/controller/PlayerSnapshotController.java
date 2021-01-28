@@ -6,11 +6,15 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import pkabus.comuniostatsbackend.persistence.model.PlayerSnapshotEntity;
@@ -18,8 +22,12 @@ import pkabus.comuniostatsbackend.service.PlayerSnapshotService;
 import pkabus.comuniostatsbackend.web.dto.PlayerSnapshotDto;
 
 @RestController
-@RequestMapping("/players/snapshots")
+@RequestMapping(PlayerSnapshotController.BASE_PLAYERS_SNAPSHOTS)
 public class PlayerSnapshotController {
+
+	public static final String BASE_PLAYERS_SNAPSHOTS = "/players/snapshots";
+	public static final String CREATE = "/create";
+	public static final String DELETE = "/delete";
 
 	private final static Integer DEFAULT_PAGE_SIZE = 183;
 
@@ -43,8 +51,8 @@ public class PlayerSnapshotController {
 				.collect(Collectors.toList());
 	}
 
-	@GetMapping(params = "id")
-	public List<PlayerSnapshotDto> byPlayerId(@RequestParam final Long id) {
+	@GetMapping(value = "/{id}")
+	public List<PlayerSnapshotDto> byPlayerId(@PathVariable final Long id) {
 		PageRequest page = PageRequest.of(0, DEFAULT_PAGE_SIZE);
 		return playerSnapshotService.findByPlayerId(id, page) //
 				.stream() //
@@ -52,9 +60,15 @@ public class PlayerSnapshotController {
 				.collect(Collectors.toList());
 	}
 
-	@PostMapping("/add")
+	@PostMapping(CREATE)
+	@ResponseStatus(HttpStatus.CREATED)
 	public void addSnapshot(@RequestBody final PlayerSnapshotDto playerSnapshot) {
 		playerSnapshotService.save(snapshotToEntity(playerSnapshot));
+	}
+
+	@DeleteMapping(value = DELETE, params = "id")
+	public void deleteById(@RequestParam final Long id) {
+		playerSnapshotService.deleteById(id);
 	}
 
 	private PlayerSnapshotDto snapshotToDto(final PlayerSnapshotEntity playerSnapshotEntity) {

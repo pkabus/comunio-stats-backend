@@ -31,18 +31,18 @@ public class PlayerSnapshotRepositoryIntegrationTest {
 	@Test
 	void givenPlayerSnapshot_whenFindByPlayerId_thenSuccess() {
 		PlayerEntity playerEntity = new PlayerEntity(randomAlphabetic(6), randomAlphabetic(6));
-		playerRepository.save(playerEntity);
+		PlayerEntity savedPlayer = playerRepository.save(playerEntity);
 
 		ClubEntity clubEntity = new ClubEntity(new Random().nextLong(), randomAlphabetic(6));
-		clubRepository.save(clubEntity);
+		ClubEntity savedClub = clubRepository.save(clubEntity);
 
-		PlayerSnapshotEntity playerSnapshotEntity = new PlayerSnapshotEntity(playerEntity, clubEntity,
+		PlayerSnapshotEntity playerSnapshotEntity = new PlayerSnapshotEntity(savedPlayer, savedClub,
 				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6));
 
 		playerSnapshotRepository.save(playerSnapshotEntity);
 
 		Page<PlayerSnapshotEntity> retrievedPlayerSnapshots = playerSnapshotRepository
-				.findByPlayerId(playerEntity.getId(), PageRequest.of(0, 10));
+				.findByPlayerId(savedPlayer.getId(), PageRequest.of(0, 10));
 
 		assertThat(retrievedPlayerSnapshots).containsExactly(playerSnapshotEntity);
 	}

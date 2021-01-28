@@ -22,12 +22,17 @@ import pkabus.comuniostatsbackend.service.PlayerService;
 import pkabus.comuniostatsbackend.web.dto.PlayerDto;
 
 @RestController
-@RequestMapping("/players")
+@RequestMapping(PlayerController.BASE_PLAYERS)
 public class PlayerController {
 
-	private PlayerService playerService;
+	public static final String BASE_PLAYERS = "/players";
+	public static final String ALL = "/all";
+	public static final String CREATE = "/create";
+	public static final String DELETE = "/delete";
 
-	private ModelMapper modelMapper;
+	private final PlayerService playerService;
+
+	private final ModelMapper modelMapper;
 
 	public PlayerController(final PlayerService playerService, final ModelMapper modelMapper) {
 		super();
@@ -35,7 +40,7 @@ public class PlayerController {
 		this.modelMapper = modelMapper;
 	}
 
-	@GetMapping(value = "/all")
+	@GetMapping(ALL)
 	public List<PlayerDto> all() {
 		return StreamSupport.stream(playerService.findAll().spliterator(), false) //
 				.map(this::toDto) //
@@ -64,15 +69,15 @@ public class PlayerController {
 		return toDto(playerEntity);
 	}
 
-	@PostMapping
+	@PostMapping(CREATE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public void create(@RequestBody final PlayerDto player) {
 		playerService.save(toEntity(player));
 	}
 
-	@DeleteMapping(value = "/delete", params = "byComunioId")
-	public void deleteByComunioId(@RequestParam final String byComunioId) {
-		playerService.deleteByComunioId(byComunioId);
+	@DeleteMapping(value = DELETE, params = "link")
+	public void deleteByLink(@RequestParam final String link) {
+		playerService.deleteByLink(link);
 	}
 
 	public void delete(final PlayerDto player) {

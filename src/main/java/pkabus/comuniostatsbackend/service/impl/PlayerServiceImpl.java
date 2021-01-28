@@ -55,9 +55,9 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public void deleteByComunioId(final String byComunioId) {
-		playerRepo.findByLink(byComunioId).ifPresentOrElse(playerRepo::delete, () -> logger
-				.info(String.format("Player with comunioId '%s' not found. Cannot be deleted.", byComunioId)));
+	public void deleteByLink(final String link) {
+		playerRepo.findByLink(link).ifPresentOrElse(playerRepo::delete, () -> logger
+				.info(String.format("Player with comunioId '%s' not found. Cannot be deleted.", link)));
 	}
 
 	@Override
@@ -66,8 +66,8 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public Optional<PlayerEntity> findByLink(final String comunioId) {
-		return playerRepo.findByLink(comunioId);
+	public Optional<PlayerEntity> findByLink(final String link) {
+		return playerRepo.findByLink(link);
 	}
 
 }

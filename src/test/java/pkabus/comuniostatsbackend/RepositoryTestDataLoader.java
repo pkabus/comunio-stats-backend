@@ -31,23 +31,23 @@ public class RepositoryTestDataLoader implements ApplicationContextAware {
 	private PlayerSnapshotRepository playerSnapshotRepository;
 
 	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+	public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
 		PlayerEntity playerEntity = new PlayerEntity(randomAlphabetic(6), randomAlphabetic(6));
-		playerRepository.save(playerEntity);
+		PlayerEntity savedPlayer = playerRepository.save(playerEntity);
 
 		ClubEntity clubEntity = new ClubEntity(new Random().nextLong(), randomAlphabetic(6));
-		clubRepository.save(clubEntity);
+		ClubEntity savedClub = clubRepository.save(clubEntity);
 
-		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity, clubEntity,
+		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), savedPlayer, savedClub,
 				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6)));
 
-		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity, clubEntity,
+		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), savedPlayer, savedClub,
 				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6)));
 
-		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity, clubEntity,
+		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), savedPlayer, savedClub,
 				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6)));
 
-		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), playerEntity, clubEntity,
+		playerSnapshotRepository.save(new PlayerSnapshotEntity(new Random().nextLong(), savedPlayer, savedClub,
 				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6)));
 	}
 }

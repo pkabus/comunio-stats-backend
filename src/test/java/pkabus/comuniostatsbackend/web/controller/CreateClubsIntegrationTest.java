@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,11 +18,6 @@ public class CreateClubsIntegrationTest {
 
 	@Autowired
 	private ClubController clubController;
-
-	@AfterEach
-	void tearDown() {
-		clubController.deleteAll();
-	}
 
 	@Test
 	void create_18_bundesliga_clubs_with_different_names_thenSuccess() {
@@ -38,7 +32,7 @@ public class CreateClubsIntegrationTest {
 				.map(clubController::byName) //
 				.collect(Collectors.toList());
 
-		assertThat(dtosByName).usingElementComparatorIgnoringFields("id").containsExactlyElementsOf(clubs);
+		assertThat(dtosByName).usingElementComparatorIgnoringFields("id").containsAll(clubs);
 	}
 
 	@Test
@@ -48,6 +42,6 @@ public class CreateClubsIntegrationTest {
 		clubController.create(club);
 		clubController.create(club);
 
-		assertThat(clubController.all()).usingElementComparatorIgnoringFields("id").containsExactly(club);
+		assertThat(clubController.all()).usingElementComparatorIgnoringFields("id").containsOnlyOnce(club);
 	}
 }

@@ -49,10 +49,11 @@ public class PlayerControllerIntegrationTest {
 
 		ClubDto clubDto = new ClubDto(randomAlphabetic(6));
 		clubController.create(clubDto);
+		ClubDto savedClubDto = clubController.byName(clubDto.getName());
 
 		PlayerDto playerDtoByLink = playerController.byLink(link);
 
-		PlayerSnapshotDto playerSnapshotDto = new PlayerSnapshotDto(playerDtoByLink, clubDto, new Random().nextLong(),
+		PlayerSnapshotDto playerSnapshotDto = new PlayerSnapshotDto(playerDtoByLink, savedClubDto, new Random().nextLong(),
 				new Random().nextInt(), LocalDate.now(), randomAlphabetic(6));
 		playerSnapshotController.addSnapshot(playerSnapshotDto);
 		List<PlayerSnapshotDto> byPlayerId = playerSnapshotController.byPlayerId(playerDtoByLink.getId());
@@ -71,7 +72,7 @@ public class PlayerControllerIntegrationTest {
 		assertThat(byComunioIdBefore).usingRecursiveComparison() //
 				.ignoringFields("id").isEqualTo(playerDto);
 
-		playerController.deleteByComunioId(link);
+		playerController.deleteByLink(link);
 
 		assertThatThrownBy(() -> playerController.byLink(link)) //
 				.isInstanceOf(ResponseStatusException.class);

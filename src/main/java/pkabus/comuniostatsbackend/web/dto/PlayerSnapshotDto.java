@@ -26,6 +26,7 @@ public class PlayerSnapshotDto {
 			final Integer pointsDuringCurrentSeason, final LocalDate created, final String position) {
 		super();
 		this.player = player;
+		this.club = club;
 		this.marketValue = marketValue;
 		this.pointsDuringCurrentSeason = pointsDuringCurrentSeason;
 		this.created = created;
@@ -75,49 +76,66 @@ public class PlayerSnapshotDto {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		PlayerSnapshotDto other = (PlayerSnapshotDto) obj;
 		if (club == null) {
-			if (other.club != null)
+			if (other.club != null) {
 				return false;
-		} else if (!club.equals(other.club))
+			}
+		} else if (!club.equals(other.club)) {
 			return false;
+		}
 		if (created == null) {
-			if (other.created != null)
+			if (other.created != null) {
 				return false;
-		} else if (!created.equals(other.created))
+			}
+		} else if (!created.equals(other.created)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (marketValue == null) {
-			if (other.marketValue != null)
+			if (other.marketValue != null) {
 				return false;
-		} else if (!marketValue.equals(other.marketValue))
+			}
+		} else if (!marketValue.equals(other.marketValue)) {
 			return false;
+		}
 		if (player == null) {
-			if (other.player != null)
+			if (other.player != null) {
 				return false;
-		} else if (!player.equals(other.player))
+			}
+		} else if (!player.equals(other.player)) {
 			return false;
+		}
 		if (pointsDuringCurrentSeason == null) {
-			if (other.pointsDuringCurrentSeason != null)
+			if (other.pointsDuringCurrentSeason != null) {
 				return false;
-		} else if (!pointsDuringCurrentSeason.equals(other.pointsDuringCurrentSeason))
+			}
+		} else if (!pointsDuringCurrentSeason.equals(other.pointsDuringCurrentSeason)) {
 			return false;
+		}
 		if (position == null) {
-			if (other.position != null)
+			if (other.position != null) {
 				return false;
-		} else if (!position.equals(other.position))
+			}
+		} else if (!position.equals(other.position)) {
 			return false;
+		}
 		return true;
 	}
 

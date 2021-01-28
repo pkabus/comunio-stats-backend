@@ -21,5 +21,5 @@ public interface PlayerService {
 
 	void deleteAll();
 
-	void deleteByComunioId(String byComunioId);
+	void deleteByLink(String link);
 }
