@@ -13,9 +13,9 @@ import pkabus.comuniostatsbackend.service.ClubService;
 @Service
 public class ClubServiceImpl implements ClubService {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private ClubRepository clubRepo;
+	private final ClubRepository clubRepo;
 
 	public ClubServiceImpl(final ClubRepository clubRepo) {
 		this.clubRepo = clubRepo;
@@ -58,7 +58,7 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public void deleteByName(String name) {
+	public void deleteByName(final String name) {
 		clubRepo.findByName(name).ifPresentOrElse(clubRepo::delete,
 				() -> logger.info(String.format("Club '%s' not found. Cannot be deleted.", name)));
 	}

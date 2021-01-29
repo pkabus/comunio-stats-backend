@@ -34,11 +34,11 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public PlayerEntity save(final PlayerEntity player) {
-		Optional<PlayerEntity> playerByComunioId = playerRepo.findByLink(player.getComunioId());
+		Optional<PlayerEntity> playerByComunioId = playerRepo.findByLink(player.getLink());
 
 		if (playerByComunioId.isPresent()) {
 			logger.warn(String.format("Player '%s' with unique link '%s' is already present. Not created again.",
-					playerByComunioId.get().getName(), playerByComunioId.get().getComunioId()));
+					playerByComunioId.get().getName(), playerByComunioId.get().getLink()));
 		}
 
 		return playerByComunioId.orElseGet(() -> playerRepo.save(player));

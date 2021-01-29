@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,9 +61,9 @@ public class PlayerSnapshotController {
 				.collect(Collectors.toList());
 	}
 
-	@PostMapping(CREATE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public void addSnapshot(@RequestBody final PlayerSnapshotDto playerSnapshot) {
+	@PostMapping(value = CREATE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void add(@RequestBody final PlayerSnapshotDto playerSnapshot) {
 		playerSnapshotService.save(snapshotToEntity(playerSnapshot));
 	}
 

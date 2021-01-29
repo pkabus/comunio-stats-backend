@@ -55,7 +55,7 @@ public class PlayerControllerIntegrationTest {
 
 		PlayerSnapshotDto playerSnapshotDto = new PlayerSnapshotDto(playerDtoByLink, savedClubDto, new Random().nextLong(),
 				new Random().nextInt(), LocalDate.now(), randomAlphabetic(6));
-		playerSnapshotController.addSnapshot(playerSnapshotDto);
+		playerSnapshotController.add(playerSnapshotDto);
 		List<PlayerSnapshotDto> byPlayerId = playerSnapshotController.byPlayerId(playerDtoByLink.getId());
 
 		assertThat(byPlayerId).usingElementComparatorIgnoringFields("id").containsExactly(playerSnapshotDto);
