@@ -2,6 +2,11 @@ package pkabus.comuniostatsbackend.web.dto;
 
 import java.time.LocalDate;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ClubSnapshotDto {
 
 	private Long id;
@@ -20,18 +25,6 @@ public class ClubSnapshotDto {
 		this.club = club;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public LocalDate getCreated() {
-		return created;
-	}
-
-	public ClubDto getClub() {
-		return club;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -43,29 +36,38 @@ public class ClubSnapshotDto {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		ClubSnapshotDto other = (ClubSnapshotDto) obj;
 		if (club == null) {
-			if (other.club != null)
+			if (other.club != null) {
 				return false;
-		} else if (!club.equals(other.club))
+			}
+		} else if (!club.equals(other.club)) {
 			return false;
+		}
 		if (created == null) {
-			if (other.created != null)
+			if (other.created != null) {
 				return false;
-		} else if (!created.equals(other.created))
+			}
+		} else if (!created.equals(other.created)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		return true;
 	}
 

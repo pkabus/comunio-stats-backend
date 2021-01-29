@@ -11,7 +11,12 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 public class PlayerSnapshotEntity {
 
 	@Id
@@ -60,34 +65,6 @@ public class PlayerSnapshotEntity {
 		this.pointsDuringCurrentSeason = pointsDuringCurrentSeason;
 		this.created = created;
 		this.position = position;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public PlayerEntity getPlayer() {
-		return player;
-	}
-
-	public ClubEntity getClub() {
-		return club;
-	}
-
-	public Long getMarketValue() {
-		return marketValue;
-	}
-
-	public Integer getPointsDuringCurrentSeason() {
-		return pointsDuringCurrentSeason;
-	}
-
-	public LocalDate getCreated() {
-		return created;
-	}
-
-	public String getPosition() {
-		return position;
 	}
 
 	@Override
@@ -173,6 +150,14 @@ public class PlayerSnapshotEntity {
 		return "PlayerSnapshotEntity [id=" + id + ", player=" + player + ", club=" + club + ", marketValue="
 				+ marketValue + ", pointsDuringCurrentSeason=" + pointsDuringCurrentSeason + ", created=" + created
 				+ ", position=" + position + "]";
+	}
+
+	public void setClub(final ClubEntity clubEntity) {
+		this.club = clubEntity;
+	}
+
+	public void setPlayer(final PlayerEntity playerEntity) {
+		this.player = playerEntity;
 	}
 
 }

@@ -4,7 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 public class ClubEntity {
 
 	@Id
@@ -16,19 +21,16 @@ public class ClubEntity {
 	public ClubEntity() {
 		super();
 	}
-	
-	public ClubEntity(Long id, String name) {
+
+	public ClubEntity(final String name) {
 		super();
-		this.id = id;
 		this.name = name;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
+	public ClubEntity(final Long id, final String name) {
+		super();
+		this.id = id;
+		this.name = name;
 	}
 
 	@Override
@@ -41,24 +43,31 @@ public class ClubEntity {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		ClubEntity other = (ClubEntity) obj;
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		return true;
 	}
 

@@ -7,35 +7,40 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PlayerSnapshotDto {
+public class FlatPlayerSnapshotDto {
+
+	private String name;
+
+	private String link;
 
 	private Long id;
 
-	private PlayerDto player;
-
-	private ClubDto club;
-
-	private Long marketValue;
+	private String position;
 
 	private Integer pointsDuringCurrentSeason;
 
+	private String club;
+
+	private Long marketValue;
+
 	private LocalDate created;
 
-	private String position;
-
-	public PlayerSnapshotDto() {
-		super();
+	public FlatPlayerSnapshotDto() {
+		//
 	}
 
-	public PlayerSnapshotDto(final PlayerDto player, final ClubDto club, final Long marketValue,
-			final Integer pointsDuringCurrentSeason, final LocalDate created, final String position) {
+	public FlatPlayerSnapshotDto(final String name, final String link, final Long id, final String position,
+			final Integer pointsDuringCurrentSeason, final String club, final Long marketValue,
+			final LocalDate created) {
 		super();
-		this.player = player;
+		this.name = name;
+		this.link = link;
+		this.id = id;
+		this.position = position;
+		this.pointsDuringCurrentSeason = pointsDuringCurrentSeason;
 		this.club = club;
 		this.marketValue = marketValue;
-		this.pointsDuringCurrentSeason = pointsDuringCurrentSeason;
 		this.created = created;
-		this.position = position;
 	}
 
 	@Override
@@ -45,8 +50,9 @@ public class PlayerSnapshotDto {
 		result = prime * result + ((club == null) ? 0 : club.hashCode());
 		result = prime * result + ((created == null) ? 0 : created.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((link == null) ? 0 : link.hashCode());
 		result = prime * result + ((marketValue == null) ? 0 : marketValue.hashCode());
-		result = prime * result + ((player == null) ? 0 : player.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((pointsDuringCurrentSeason == null) ? 0 : pointsDuringCurrentSeason.hashCode());
 		result = prime * result + ((position == null) ? 0 : position.hashCode());
 		return result;
@@ -63,7 +69,7 @@ public class PlayerSnapshotDto {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		PlayerSnapshotDto other = (PlayerSnapshotDto) obj;
+		FlatPlayerSnapshotDto other = (FlatPlayerSnapshotDto) obj;
 		if (club == null) {
 			if (other.club != null) {
 				return false;
@@ -85,6 +91,13 @@ public class PlayerSnapshotDto {
 		} else if (!id.equals(other.id)) {
 			return false;
 		}
+		if (link == null) {
+			if (other.link != null) {
+				return false;
+			}
+		} else if (!link.equals(other.link)) {
+			return false;
+		}
 		if (marketValue == null) {
 			if (other.marketValue != null) {
 				return false;
@@ -92,11 +105,11 @@ public class PlayerSnapshotDto {
 		} else if (!marketValue.equals(other.marketValue)) {
 			return false;
 		}
-		if (player == null) {
-			if (other.player != null) {
+		if (name == null) {
+			if (other.name != null) {
 				return false;
 			}
-		} else if (!player.equals(other.player)) {
+		} else if (!name.equals(other.name)) {
 			return false;
 		}
 		if (pointsDuringCurrentSeason == null) {
@@ -118,9 +131,9 @@ public class PlayerSnapshotDto {
 
 	@Override
 	public String toString() {
-		return "PlayerSnapshotDto [id=" + id + ", player=" + player + ", club=" + club + ", marketValue=" + marketValue
-				+ ", pointsDuringCurrentSeason=" + pointsDuringCurrentSeason + ", created=" + created + ", position="
-				+ position + "]";
+		return "FlatPlayerSnapshotDto [name=" + name + ", link=" + link + ", id=" + id + ", position=" + position
+				+ ", pointsDuringCurrentSeason=" + pointsDuringCurrentSeason + ", club=" + club + ", marketValue="
+				+ marketValue + ", created=" + created + "]";
 	}
 
 }

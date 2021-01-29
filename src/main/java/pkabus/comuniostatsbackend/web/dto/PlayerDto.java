@@ -1,5 +1,10 @@
 package pkabus.comuniostatsbackend.web.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class PlayerDto {
 
 	private Long id;
@@ -22,18 +27,6 @@ public class PlayerDto {
 		this(player.name, player.link);
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public String getLink() {
-		return link;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -45,29 +38,38 @@ public class PlayerDto {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		PlayerDto other = (PlayerDto) obj;
 		if (link == null) {
-			if (other.link != null)
+			if (other.link != null) {
 				return false;
-		} else if (!link.equals(other.link))
+			}
+		} else if (!link.equals(other.link)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		return true;
 	}
 

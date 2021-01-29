@@ -12,7 +12,12 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 public class ClubSnapshotEntity {
 
 	@Id
@@ -30,23 +35,11 @@ public class ClubSnapshotEntity {
 		super();
 	}
 
-	public ClubSnapshotEntity(Long id, ClubEntity club) {
+	public ClubSnapshotEntity(final Long id, final ClubEntity club) {
 		super();
 		this.id = id;
 		this.created = LocalDate.now();
 		this.club = club;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public LocalDate getCreated() {
-		return created;
-	}
-
-	public ClubEntity getClub() {
-		return club;
 	}
 
 	@Override
@@ -60,29 +53,38 @@ public class ClubSnapshotEntity {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		ClubSnapshotEntity other = (ClubSnapshotEntity) obj;
 		if (club == null) {
-			if (other.club != null)
+			if (other.club != null) {
 				return false;
-		} else if (!club.equals(other.club))
+			}
+		} else if (!club.equals(other.club)) {
 			return false;
+		}
 		if (created == null) {
-			if (other.created != null)
+			if (other.created != null) {
 				return false;
-		} else if (!created.equals(other.created))
+			}
+		} else if (!created.equals(other.created)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		return true;
 	}
 
