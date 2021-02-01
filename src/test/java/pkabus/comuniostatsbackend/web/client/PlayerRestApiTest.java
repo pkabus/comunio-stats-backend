@@ -47,10 +47,10 @@ public class PlayerRestApiTest {
 
 	@Test
 	void whenUnknownId_then404NotFound() {
-		ResponseEntity<PlayerDto> response = restTemplate
-				.getForEntity(PlayerController.BASE_PLAYERS + "/" + new Random().nextLong(), PlayerDto.class);
+		ResponseEntity<?> responseUnknown = restTemplate
+				.getForEntity(PlayerController.BASE_PLAYERS + "/" + new Random().nextLong(), Object.class);
 
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+		assertThat(responseUnknown.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
 	@Test
