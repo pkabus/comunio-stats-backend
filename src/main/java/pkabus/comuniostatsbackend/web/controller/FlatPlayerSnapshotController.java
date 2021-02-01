@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pkabus.comuniostatsbackend.persistence.model.ClubEntity;
 import pkabus.comuniostatsbackend.persistence.model.PlayerEntity;
 import pkabus.comuniostatsbackend.persistence.model.PlayerSnapshotEntity;
-import pkabus.comuniostatsbackend.service.PlayerSnapshotService;
+import pkabus.comuniostatsbackend.service.FlatPlayerSnapshotService;
 import pkabus.comuniostatsbackend.web.dto.FlatPlayerSnapshotDto;
 
 @RestController
@@ -24,21 +24,21 @@ public class FlatPlayerSnapshotController {
 	public static final String BASE_FLAT_SNAPSHOTS = "/flatsnapshots";
 	public static final String CREATE = "/create";
 
-	private final PlayerSnapshotService playerSnapshotService;
+	private final FlatPlayerSnapshotService flatPlayerSnapshotService;
 
 	private final ModelMapper modelMapper;
 
-	public FlatPlayerSnapshotController(final PlayerSnapshotService playerSnapshotService,
+	public FlatPlayerSnapshotController(final FlatPlayerSnapshotService flatPlayerSnapshotService,
 			final ModelMapper modelMapper) {
 		super();
-		this.playerSnapshotService = playerSnapshotService;
+		this.flatPlayerSnapshotService = flatPlayerSnapshotService;
 		this.modelMapper = modelMapper;
 	}
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(value = CREATE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void addAll(@RequestBody final List<FlatPlayerSnapshotDto> dtos) {
-		playerSnapshotService.saveAll(dtos.stream().map(this::flatSnapshotToPlayerSnapshotEntity));
+		flatPlayerSnapshotService.saveAll(dtos.stream().map(this::flatSnapshotToPlayerSnapshotEntity));
 	}
 
 	private PlayerSnapshotEntity flatSnapshotToPlayerSnapshotEntity(final FlatPlayerSnapshotDto flatPlayerSnapshotDto) {

@@ -1,9 +1,7 @@
 package pkabus.comuniostatsbackend.service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +20,4 @@ public interface PlayerSnapshotService {
 	PlayerSnapshotEntity save(PlayerSnapshotEntity playerSnapshot);
 
 	void deleteById(Long id);
-
-	List<PlayerSnapshotEntity> saveAll(Stream<PlayerSnapshotEntity> map);
-
 }
