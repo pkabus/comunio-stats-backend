@@ -36,7 +36,7 @@ public class WebSecurityIntegrationTest {
 		List<FlatPlayerSnapshotDto> flatPlayers = Arrays
 				.asList(objectMapper.readValue(testJsonFile, FlatPlayerSnapshotDto[].class));
 
-		ResponseEntity<Void> postResponse = restTemplate.withBasicAuth("user", "password") //
+		ResponseEntity<Void> postResponse = restTemplate.withBasicAuth("crawler", "password") //
 				.postForEntity(BASE_FLAT_SNAPSHOTS + CREATE, flatPlayers, Void.class);
 
 		assertThat(postResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);

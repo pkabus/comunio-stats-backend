@@ -40,7 +40,7 @@ public class PlayerRestApiTest {
 	@Test
 	void whenCreate_then201Created() {
 		PlayerDto playerDto = new PlayerDto(randomAlphabetic(6), randomAlphabetic(6));
-		ResponseEntity<Void> response = restTemplate.withBasicAuth("user", "password")
+		ResponseEntity<Void> response = restTemplate.withBasicAuth("crawler", "password")
 				.postForEntity(BASE_PLAYERS + CREATE, playerDto, Void.class);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);

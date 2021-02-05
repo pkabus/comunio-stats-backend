@@ -19,14 +19,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		auth.inMemoryAuthentication().withUser("user").password(encoder.encode("password")).authorities("ROLE_USER");
+		auth.inMemoryAuthentication().withUser("crawler").password(encoder.encode("password")).authorities("ROLE_CRAWLER");
 	}
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests() //
 				.antMatchers(BASE_FLAT_SNAPSHOTS + CREATE) //
-				.hasRole("USER") //
+				.hasRole("CRAWLER") //
 				.and() //
 				.httpBasic() // TODO no basic authentication!!!
 				.and() //

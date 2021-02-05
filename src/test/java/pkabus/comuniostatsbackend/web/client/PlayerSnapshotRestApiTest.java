@@ -73,7 +73,7 @@ public class PlayerSnapshotRestApiTest {
 		List<PlayerDto> allPlayersBefore = allPlayersResponseBefore.getBody();
 
 		// test POST request
-		ResponseEntity<Void> postResponse = restTemplate.withBasicAuth("user", "password") //
+		ResponseEntity<Void> postResponse = restTemplate.withBasicAuth("crawler", "password") //
 				.postForEntity(BASE_FLAT_SNAPSHOTS + CREATE, flatPlayers, Void.class);
 
 		// GET players after test request
