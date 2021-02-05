@@ -1,6 +1,11 @@
 package pkabus.comuniostatsbackend.web.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static pkabus.comuniostatsbackend.web.controller.FlatPlayerSnapshotController.BASE_FLAT_SNAPSHOTS;
+import static pkabus.comuniostatsbackend.web.controller.FlatPlayerSnapshotController.CREATE;
+import static pkabus.comuniostatsbackend.web.controller.PlayerController.ALL;
+import static pkabus.comuniostatsbackend.web.controller.PlayerController.BASE_PLAYERS;
+import static pkabus.comuniostatsbackend.web.controller.PlayerSnapshotController.BASE_PLAYERS_SNAPSHOTS;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,9 +28,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import pkabus.comuniostatsbackend.web.controller.FlatPlayerSnapshotController;
-import pkabus.comuniostatsbackend.web.controller.PlayerController;
-import pkabus.comuniostatsbackend.web.controller.PlayerSnapshotController;
 import pkabus.comuniostatsbackend.web.dto.FlatPlayerSnapshotDto;
 import pkabus.comuniostatsbackend.web.dto.PlayerDto;
 import pkabus.comuniostatsbackend.web.dto.PlayerSnapshotDto;
@@ -41,14 +43,13 @@ public class PlayerSnapshotRestApiTest {
 
 	@Test
 	void givenPlayerSnapshots_whenByPlayerId_then200Ok() {
-		ResponseEntity<List<PlayerDto>> responseList = restTemplate.exchange(
-				PlayerController.BASE_PLAYERS + PlayerController.ALL, HttpMethod.GET, null,
+		ResponseEntity<List<PlayerDto>> responseList = restTemplate.exchange(BASE_PLAYERS + ALL, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<PlayerDto>>() {
 				});
 		PlayerDto playerDto = responseList.getBody().get(0);
 
 		ResponseEntity<List<PlayerSnapshotDto>> response = restTemplate.exchange(
-				PlayerSnapshotController.BASE_PLAYERS_SNAPSHOTS + "/" + playerDto.getId(), HttpMethod.GET, null,
+				BASE_PLAYERS_SNAPSHOTS + "/" + playerDto.getId(), HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<PlayerSnapshotDto>>() {
 				});
 
@@ -66,21 +67,18 @@ public class PlayerSnapshotRestApiTest {
 				.asList(objectMapper.readValue(testJsonFile, FlatPlayerSnapshotDto[].class));
 
 		// GET players before test request
-		ResponseEntity<List<PlayerDto>> allPlayersResponseBefore = restTemplate.exchange(
-				PlayerController.BASE_PLAYERS + PlayerController.ALL, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<PlayerDto>>() {
+		ResponseEntity<List<PlayerDto>> allPlayersResponseBefore = restTemplate.exchange(BASE_PLAYERS + ALL,
+				HttpMethod.GET, null, new ParameterizedTypeReference<List<PlayerDto>>() {
 				});
 		List<PlayerDto> allPlayersBefore = allPlayersResponseBefore.getBody();
 
 		// test POST request
-		ResponseEntity<Void> postResponse = restTemplate.postForEntity(
-				FlatPlayerSnapshotController.BASE_FLAT_SNAPSHOTS + FlatPlayerSnapshotController.CREATE, flatPlayers,
-				Void.class);
+		ResponseEntity<Void> postResponse = restTemplate.withBasicAuth("user", "password") //
+				.postForEntity(BASE_FLAT_SNAPSHOTS + CREATE, flatPlayers, Void.class);
 
 		// GET players after test request
-		ResponseEntity<List<PlayerDto>> allPlayersResponseAfter = restTemplate.exchange(
-				PlayerController.BASE_PLAYERS + PlayerController.ALL, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<PlayerDto>>() {
+		ResponseEntity<List<PlayerDto>> allPlayersResponseAfter = restTemplate.exchange(BASE_PLAYERS + ALL,
+				HttpMethod.GET, null, new ParameterizedTypeReference<List<PlayerDto>>() {
 				});
 		List<PlayerDto> allPlayersAfter = allPlayersResponseAfter.getBody();
 
@@ -90,7 +88,7 @@ public class PlayerSnapshotRestApiTest {
 				.map(PlayerDto::getId) //
 				.map(id -> {
 					ResponseEntity<List<PlayerSnapshotDto>> playerSnapshotResponse = restTemplate.exchange(
-							PlayerSnapshotController.BASE_PLAYERS_SNAPSHOTS + "/" + id, HttpMethod.GET, null,
+							BASE_PLAYERS_SNAPSHOTS + "/" + id, HttpMethod.GET, null,
 							new ParameterizedTypeReference<List<PlayerSnapshotDto>>() {
 							});
 					return playerSnapshotResponse;
