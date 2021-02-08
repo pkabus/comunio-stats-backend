@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -44,7 +45,8 @@ public class PlayerSnapshotController {
 
 	@GetMapping(params = { "id", "start", "end" })
 	public List<PlayerSnapshotDto> byPlayerIdAndCreatedBetween(@RequestParam final Long id,
-			@RequestParam final LocalDate start, @RequestParam final LocalDate end) {
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam final LocalDate start,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam final LocalDate end) {
 		PageRequest page = PageRequest.of(0, DEFAULT_PAGE_SIZE);
 		return playerSnapshotService.findByPlayerIdAndDateCreatedBetween(id, start, end, page) //
 				.stream() //
