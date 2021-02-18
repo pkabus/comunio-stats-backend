@@ -1,6 +1,7 @@
 package pkabus.comuniostatsbackend.service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,8 +15,10 @@ public interface PlayerSnapshotService {
 
 	Page<PlayerSnapshotEntity> findByPlayerId(Long id, Pageable pageable);
 
-	Page<PlayerSnapshotEntity> findByPlayerIdAndDateCreatedBetween(Long id, LocalDate start, LocalDate end,
+	Page<PlayerSnapshotEntity> findByPlayerIdAndCreatedBetween(Long id, LocalDate start, LocalDate end,
 			Pageable pageable);
+
+	List<PlayerSnapshotEntity> findByClubNameAndCreated(String name, LocalDate date);
 
 	PlayerSnapshotEntity save(PlayerSnapshotEntity playerSnapshot);
 

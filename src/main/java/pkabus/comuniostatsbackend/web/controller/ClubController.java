@@ -6,6 +6,7 @@ import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,9 +25,9 @@ import pkabus.comuniostatsbackend.web.dto.ClubDto;
 @RequestMapping("/clubs")
 public class ClubController {
 
-	private ClubService clubService;
+	private final ClubService clubService;
 
-	private ModelMapper modelMapper;
+	private final ModelMapper modelMapper;
 
 	public ClubController(final ClubService clubService, final ModelMapper modelMapper) {
 		super();
@@ -35,6 +36,7 @@ public class ClubController {
 	}
 
 	@GetMapping(value = "/all")
+    @CrossOrigin
 	public List<ClubDto> all() {
 		return StreamSupport.stream(clubService.findAll().spliterator(), false) //
 				.map(this::toDto) //
@@ -42,14 +44,14 @@ public class ClubController {
 	}
 
 	@GetMapping(params = "id")
-	public ClubDto byId(@RequestParam Long id) {
+	public ClubDto byId(@RequestParam final Long id) {
 		ClubEntity clubEntity = clubService.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 		return toDto(clubEntity);
 	}
 
 	@GetMapping(params = "name")
-	public ClubDto byName(@RequestParam String name) {
+	public ClubDto byName(@RequestParam final String name) {
 		ClubEntity clubEntity = clubService.findByName(name)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 		return toDto(clubEntity);
@@ -57,7 +59,7 @@ public class ClubController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public void create(@RequestBody ClubDto club) {
+	public void create(@RequestBody final ClubDto club) {
 		clubService.save(toEntity(club));
 	}
 
@@ -74,11 +76,11 @@ public class ClubController {
 		clubService.deleteAll();
 	}
 
-	private ClubDto toDto(ClubEntity clubEntity) {
+	private ClubDto toDto(final ClubEntity clubEntity) {
 		return modelMapper.map(clubEntity, ClubDto.class);
 	}
 
-	private ClubEntity toEntity(ClubDto clubDto) {
+	private ClubEntity toEntity(final ClubDto clubDto) {
 		return modelMapper.map(clubDto, ClubEntity.class);
 	}
 

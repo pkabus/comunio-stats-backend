@@ -1,6 +1,7 @@
 package pkabus.comuniostatsbackend.service.impl;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
 	}
 
 	@Override
-	public Page<PlayerSnapshotEntity> findByPlayerIdAndDateCreatedBetween(final Long id, final LocalDate start,
+	public Page<PlayerSnapshotEntity> findByPlayerIdAndCreatedBetween(final Long id, final LocalDate start,
 			final LocalDate end, final Pageable pageable) {
 		return playerSnapshotRepo.findByPlayerIdAndCreatedBetween(id, start, end, pageable);
 	}
@@ -49,6 +50,11 @@ public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
 	@Override
 	public void deleteById(final Long id) {
 		playerSnapshotRepo.deleteById(id);
+	}
+
+	@Override
+	public List<PlayerSnapshotEntity> findByClubNameAndCreated(final String name, final LocalDate date) {
+		return playerSnapshotRepo.findByClubNameAndCreated(name, date);
 	}
 
 }

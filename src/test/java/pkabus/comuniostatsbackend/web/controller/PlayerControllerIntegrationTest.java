@@ -53,8 +53,8 @@ public class PlayerControllerIntegrationTest {
 
 		PlayerDto playerDtoByLink = playerController.byLink(link);
 
-		PlayerSnapshotDto playerSnapshotDto = new PlayerSnapshotDto(playerDtoByLink, savedClubDto, new Random().nextLong(),
-				new Random().nextInt(), LocalDate.now(), randomAlphabetic(6));
+		PlayerSnapshotDto playerSnapshotDto = new PlayerSnapshotDto(playerDtoByLink, savedClubDto,
+				new Random().nextLong(), new Random().nextInt(), LocalDate.now(), randomAlphabetic(6));
 		playerSnapshotController.add(playerSnapshotDto);
 		List<PlayerSnapshotDto> byPlayerId = playerSnapshotController.byPlayerId(playerDtoByLink.getId());
 
@@ -76,5 +76,43 @@ public class PlayerControllerIntegrationTest {
 
 		assertThatThrownBy(() -> playerController.byLink(link)) //
 				.isInstanceOf(ResponseStatusException.class);
+	}
+
+	@Test
+	void givenClubAndPlayers_whenFindByClubName_thenReturnPlayers() {
+		ClubDto clubDto = new ClubDto(randomAlphabetic(6));
+		clubController.create(clubDto);
+		ClubDto savedClubDto = clubController.byName(clubDto.getName());
+
+		String playerOneName = randomAlphabetic(6);
+		String playerOneLink = randomAlphabetic(6);
+		PlayerDto playerOneDto = new PlayerDto(playerOneName, playerOneLink);
+		playerController.create(playerOneDto);
+		PlayerDto savedPlayerOneDto = playerController.byName(playerOneName).get(0);
+
+		// create two snapshots for the same player
+		PlayerSnapshotDto playerOneSnapshotDto = new PlayerSnapshotDto(savedPlayerOneDto, savedClubDto,
+				new Random().nextLong(), new Random().nextInt(), LocalDate.now().minusDays(1), randomAlphabetic(6));
+		playerSnapshotController.add(playerOneSnapshotDto);
+		PlayerSnapshotDto playerOneNewerSnapshotDto = new PlayerSnapshotDto(savedPlayerOneDto, savedClubDto,
+				new Random().nextLong(), new Random().nextInt(), LocalDate.now(), randomAlphabetic(6));
+		playerSnapshotController.add(playerOneNewerSnapshotDto);
+
+		// create another player + snapshot
+		String playerTwoName = randomAlphabetic(6);
+		String playerTwoLink = randomAlphabetic(6);
+		PlayerDto playerTwoDto = new PlayerDto(playerTwoName, playerTwoLink);
+		playerController.create(playerTwoDto);
+		PlayerDto savedPlayerTwoDto = playerController.byName(playerTwoName).get(0);
+
+		PlayerSnapshotDto playerTwoSnapshotDto = new PlayerSnapshotDto(savedPlayerTwoDto, savedClubDto,
+				new Random().nextLong(), new Random().nextInt(), LocalDate.now().minusDays(1), randomAlphabetic(6));
+		playerSnapshotController.add(playerTwoSnapshotDto);
+
+		List<PlayerSnapshotDto> distinctByClubName = playerSnapshotController.byClubName(clubDto.getName());
+
+		assertThat(distinctByClubName) //
+				.usingElementComparatorIgnoringFields("id") //
+				.containsExactlyInAnyOrder(playerOneSnapshotDto, playerTwoSnapshotDto);
 	}
 }

@@ -48,7 +48,7 @@ public class PlayerSnapshotController {
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam final LocalDate start,
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam final LocalDate end) {
 		PageRequest page = PageRequest.of(0, DEFAULT_PAGE_SIZE);
-		return playerSnapshotService.findByPlayerIdAndDateCreatedBetween(id, start, end, page) //
+		return playerSnapshotService.findByPlayerIdAndCreatedBetween(id, start, end, page) //
 				.stream() //
 				.map(this::snapshotToDto) //
 				.collect(Collectors.toList());
@@ -59,6 +59,19 @@ public class PlayerSnapshotController {
 		PageRequest page = PageRequest.of(0, DEFAULT_PAGE_SIZE);
 		return playerSnapshotService.findByPlayerId(id, page) //
 				.stream() //
+				.map(this::snapshotToDto) //
+				.collect(Collectors.toList());
+	}
+
+	@GetMapping(params = "clubName")
+	public List<PlayerSnapshotDto> byClubName(@RequestParam final String clubName) {
+		return this.byClubNameAndDate(clubName, LocalDate.now().minusDays(1));
+	}
+
+	@GetMapping(params = { "clubName", "date" })
+	public List<PlayerSnapshotDto> byClubNameAndDate(@RequestParam final String clubName,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam final LocalDate date) {
+		return playerSnapshotService.findByClubNameAndCreated(clubName, date).stream() //
 				.map(this::snapshotToDto) //
 				.collect(Collectors.toList());
 	}
