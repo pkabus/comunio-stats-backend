@@ -26,6 +26,7 @@ services:
       - "mysql"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/db_comunio?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING.DATASOURCE.INITIALIZATIONMODE=ALWAYS
     ports:
       - "8080:8080"
       
