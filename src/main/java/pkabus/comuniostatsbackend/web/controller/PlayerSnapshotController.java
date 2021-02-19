@@ -7,16 +7,11 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import pkabus.comuniostatsbackend.persistence.model.PlayerSnapshotEntity;
@@ -76,12 +71,6 @@ public class PlayerSnapshotController {
 				.collect(Collectors.toList());
 	}
 
-	@ResponseStatus(HttpStatus.CREATED)
-	@PostMapping(value = CREATE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void add(@RequestBody final PlayerSnapshotDto playerSnapshot) {
-		playerSnapshotService.save(snapshotToEntity(playerSnapshot));
-	}
-
 	@DeleteMapping(value = DELETE, params = "id")
 	public void deleteById(@RequestParam final Long id) {
 		playerSnapshotService.deleteById(id);
@@ -90,9 +79,4 @@ public class PlayerSnapshotController {
 	private PlayerSnapshotDto snapshotToDto(final PlayerSnapshotEntity playerSnapshotEntity) {
 		return modelMapper.map(playerSnapshotEntity, PlayerSnapshotDto.class);
 	}
-
-	private PlayerSnapshotEntity snapshotToEntity(final PlayerSnapshotDto playerSnapshotDto) {
-		return modelMapper.map(playerSnapshotDto, PlayerSnapshotEntity.class);
-	}
-
 }

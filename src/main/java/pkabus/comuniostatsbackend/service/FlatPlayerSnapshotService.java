@@ -7,8 +7,8 @@ import pkabus.comuniostatsbackend.persistence.model.PlayerSnapshotEntity;
 
 public interface FlatPlayerSnapshotService {
 
-	PlayerSnapshotEntity save(PlayerSnapshotEntity playerSnapshot);
-
 	List<PlayerSnapshotEntity> saveAll(Stream<PlayerSnapshotEntity> map);
+
+	PlayerSnapshotEntity getOrSave(PlayerSnapshotEntity playerSnapshot);
 
 }

@@ -20,7 +20,5 @@ public interface PlayerSnapshotService {
 
 	List<PlayerSnapshotEntity> findByClubNameAndCreated(String name, LocalDate date);
 
-	PlayerSnapshotEntity save(PlayerSnapshotEntity playerSnapshot);
-
 	void deleteById(Long id);
 }

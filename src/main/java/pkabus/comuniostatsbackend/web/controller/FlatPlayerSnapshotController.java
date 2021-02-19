@@ -1,6 +1,6 @@
 package pkabus.comuniostatsbackend.web.controller;
 
-import java.util.List;
+import java.util.Arrays;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -37,8 +37,8 @@ public class FlatPlayerSnapshotController {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(value = CREATE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void addAll(@RequestBody final List<FlatPlayerSnapshotDto> dtos) {
-		flatPlayerSnapshotService.saveAll(dtos.stream().map(this::flatSnapshotToPlayerSnapshotEntity));
+	public void add(@RequestBody final FlatPlayerSnapshotDto... dtos) {
+		flatPlayerSnapshotService.saveAll(Arrays.stream(dtos).map(this::flatSnapshotToPlayerSnapshotEntity));
 	}
 
 	private PlayerSnapshotEntity flatSnapshotToPlayerSnapshotEntity(final FlatPlayerSnapshotDto flatPlayerSnapshotDto) {

@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,8 +14,6 @@ import pkabus.comuniostatsbackend.service.PlayerSnapshotService;
 
 @Service
 public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
-
-	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private final PlayerSnapshotRepository playerSnapshotRepo;
 
@@ -33,12 +29,6 @@ public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
 	@Override
 	public Page<PlayerSnapshotEntity> findByPlayerId(final Long id, final Pageable pageable) {
 		return playerSnapshotRepo.findByPlayerId(id, pageable);
-	}
-
-	@Override
-	public PlayerSnapshotEntity save(final PlayerSnapshotEntity playerSnapshot) {
-		log.info("Save snapshot for " + playerSnapshot.getPlayer());
-		return playerSnapshotRepo.save(playerSnapshot);
 	}
 
 	@Override

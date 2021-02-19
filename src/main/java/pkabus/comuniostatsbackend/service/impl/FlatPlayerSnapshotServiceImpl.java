@@ -1,6 +1,7 @@
 package pkabus.comuniostatsbackend.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,17 +35,37 @@ public class FlatPlayerSnapshotServiceImpl implements FlatPlayerSnapshotService 
 		this.clubRepository = clubRepository;
 	}
 
-	@Override
-	public PlayerSnapshotEntity save(final PlayerSnapshotEntity playerSnapshot) {
+	private PlayerSnapshotEntity save(final PlayerSnapshotEntity playerSnapshot) {
 		log.info("Save snapshot for " + playerSnapshot.getPlayer());
 		return playerSnapshotRepo.save(playerSnapshot);
 	}
 
 	@Override
+	public PlayerSnapshotEntity getOrSave(final PlayerSnapshotEntity playerSnapshot) {
+		Optional<PlayerSnapshotEntity> existingSnapshot = playerSnapshotRepo
+				.findByPlayerLinkAndCreated(playerSnapshot.getPlayer().getLink(), playerSnapshot.getCreated());
+
+		// log if playerSnapshot already exists
+		existingSnapshot.ifPresent(snapshot -> {
+			PlayerEntity player = snapshot.getPlayer();
+			log.warn("Snapshot for player with name " //
+					+ player.getName() + " and link " //
+					+ player.getLink() + " for date " //
+					+ playerSnapshot.getCreated() //
+					+ " already exists.");
+		});
+
+		// get existing snapshot or add refs (club, player) and save snapshot
+		return existingSnapshot.orElseGet(() -> {
+			addReferences(playerSnapshot);
+			return save(playerSnapshot);
+		});
+	}
+
+	@Override
 	public List<PlayerSnapshotEntity> saveAll(final Stream<PlayerSnapshotEntity> stream) {
 		return stream //
-				.map(this::addReferences) //
-				.map(this::save) //
+				.map(this::getOrSave) //
 				.collect(Collectors.toList());
 	}
 
