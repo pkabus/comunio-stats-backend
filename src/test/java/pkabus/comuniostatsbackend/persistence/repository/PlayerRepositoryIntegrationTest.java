@@ -4,12 +4,13 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import pkabus.comuniostatsbackend.persistence.model.PlayerEntity;
 
@@ -41,9 +42,9 @@ public class PlayerRepositoryIntegrationTest {
 		PlayerEntity player = new PlayerEntity(randomAlphabetic(6), randomAlphabetic(6));
 		playerRepository.save(player);
 
-		List<PlayerEntity> retrievedPlayer = playerRepository.findByName(player.getName());
+		Page<PlayerEntity> retrievedPlayer = playerRepository.findByName(player.getName(), PageRequest.of(0,  20));
 
-		assertEquals(retrievedPlayer.get(0), player);
+		assertEquals(retrievedPlayer.getContent().get(0), player);
 	}
 
 }

@@ -1,10 +1,11 @@
 package pkabus.comuniostatsbackend.service.impl;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import pkabus.comuniostatsbackend.persistence.model.PlayerEntity;
@@ -14,17 +15,17 @@ import pkabus.comuniostatsbackend.service.PlayerService;
 @Service
 public class PlayerServiceImpl implements PlayerService {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private PlayerRepository playerRepo;
+	private final PlayerRepository playerRepo;
 
 	public PlayerServiceImpl(final PlayerRepository playerRepository) {
 		this.playerRepo = playerRepository;
 	}
 
 	@Override
-	public Iterable<PlayerEntity> findAll() {
-		return playerRepo.findAll();
+	public Page<PlayerEntity> findAll(final Pageable page) {
+		return playerRepo.findAll(page);
 	}
 
 	@Override
@@ -56,18 +57,17 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public void deleteByLink(final String link) {
-		playerRepo.findByLink(link).ifPresentOrElse(playerRepo::delete, () -> logger
-				.info(String.format("Player with comunioId '%s' not found. Cannot be deleted.", link)));
+		playerRepo.findByLink(link).ifPresentOrElse(playerRepo::delete,
+				() -> logger.info(String.format("Player with comunioId '%s' not found. Cannot be deleted.", link)));
 	}
 
 	@Override
-	public List<PlayerEntity> findByName(final String name) {
-		return playerRepo.findByName(name);
+	public Page<PlayerEntity> findByName(final String name, final Pageable page) {
+		return playerRepo.findByName(name, page);
 	}
 
 	@Override
 	public Optional<PlayerEntity> findByLink(final String link) {
 		return playerRepo.findByLink(link);
 	}
-
 }

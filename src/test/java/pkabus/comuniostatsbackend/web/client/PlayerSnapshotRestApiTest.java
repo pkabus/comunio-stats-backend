@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.core.TypeReferences.PagedModelType;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,14 +46,14 @@ public class PlayerSnapshotRestApiTest {
 
 	@Test
 	void givenPlayerSnapshots_whenByPlayerId_then200Ok() {
-		ResponseEntity<List<PlayerDto>> responseList = restTemplate.exchange(BASE_PLAYERS + ALL, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<PlayerDto>>() {
+		ResponseEntity<PagedModel<PlayerDto>> responseList = restTemplate.exchange(BASE_PLAYERS + ALL, HttpMethod.GET,
+				null, new ParameterizedTypeReference<PagedModel<PlayerDto>>() {
 				});
-		PlayerDto playerDto = responseList.getBody().get(0);
+		PlayerDto playerDto = responseList.getBody().getContent().iterator().next();
 
-		ResponseEntity<List<PlayerSnapshotDto>> response = restTemplate.exchange(
-				BASE_PLAYERS_SNAPSHOTS + "/" + playerDto.getId(), HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<PlayerSnapshotDto>>() {
+		ResponseEntity<PagedModel<PlayerSnapshotDto>> response = restTemplate.exchange(
+				BASE_PLAYERS_SNAPSHOTS + "?id=" + playerDto.getId(), HttpMethod.GET, null,
+				new PagedModelType<PlayerSnapshotDto>() {
 				});
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -67,29 +70,29 @@ public class PlayerSnapshotRestApiTest {
 				.asList(objectMapper.readValue(testJsonFile, FlatPlayerSnapshotDto[].class));
 
 		// GET players before test request
-		ResponseEntity<List<PlayerDto>> allPlayersResponseBefore = restTemplate.exchange(BASE_PLAYERS + ALL,
-				HttpMethod.GET, null, new ParameterizedTypeReference<List<PlayerDto>>() {
+		ResponseEntity<PagedModel<PlayerDto>> allPlayersResponseBefore = restTemplate.exchange(BASE_PLAYERS + ALL,
+				HttpMethod.GET, null, new PagedModelType<PlayerDto>() {
 				});
-		List<PlayerDto> allPlayersBefore = allPlayersResponseBefore.getBody();
+		PagedModel<PlayerDto> allPlayersBefore = allPlayersResponseBefore.getBody();
 
 		// test POST request
 		ResponseEntity<Void> postResponse = restTemplate.withBasicAuth("crawler", "password") //
 				.postForEntity(BASE_FLAT_SNAPSHOTS + CREATE, flatPlayers, Void.class);
 
 		// GET players after test request
-		ResponseEntity<List<PlayerDto>> allPlayersResponseAfter = restTemplate.exchange(BASE_PLAYERS + ALL,
-				HttpMethod.GET, null, new ParameterizedTypeReference<List<PlayerDto>>() {
+		ResponseEntity<PagedModel<PlayerDto>> allPlayersResponseAfter = restTemplate.exchange(BASE_PLAYERS + ALL,
+				HttpMethod.GET, null, new PagedModelType<PlayerDto>() {
 				});
-		List<PlayerDto> allPlayersAfter = allPlayersResponseAfter.getBody();
+		PagedModel<PlayerDto> allPlayersAfter = allPlayersResponseAfter.getBody();
 
 		// GET player snapshots by player ids after test request
-		List<ResponseEntity<List<PlayerSnapshotDto>>> playerSnapshotResponses = allPlayersAfter //
-				.stream() //
+		List<ResponseEntity<PagedModel<PlayerSnapshotDto>>> playerSnapshotResponses = StreamSupport
+				.stream(allPlayersAfter.spliterator(), false) //
 				.map(PlayerDto::getId) //
 				.map(id -> {
-					ResponseEntity<List<PlayerSnapshotDto>> playerSnapshotResponse = restTemplate.exchange(
-							BASE_PLAYERS_SNAPSHOTS + "/" + id, HttpMethod.GET, null,
-							new ParameterizedTypeReference<List<PlayerSnapshotDto>>() {
+					ResponseEntity<PagedModel<PlayerSnapshotDto>> playerSnapshotResponse = restTemplate.exchange(
+							BASE_PLAYERS_SNAPSHOTS + "?id=" + id, HttpMethod.GET, null,
+							new PagedModelType<PlayerSnapshotDto>() {
 							});
 					return playerSnapshotResponse;
 				}) //
@@ -103,12 +106,12 @@ public class PlayerSnapshotRestApiTest {
 		// verify player GET responses
 		softAsserts.assertThat(allPlayersResponseBefore.getStatusCode()).isEqualTo(HttpStatus.OK);
 		softAsserts.assertThat(allPlayersResponseAfter.getStatusCode()).isEqualTo(HttpStatus.OK);
-		softAsserts.assertThat(allPlayersAfter).hasSize(allPlayersBefore.size() + 516);
+		softAsserts.assertThat(allPlayersAfter.getMetadata().getTotalElements())
+				.isEqualTo(allPlayersBefore.getMetadata().getTotalElements() + 516);
 
 		// player snapshot GET responses
 		softAsserts.assertThat(playerSnapshotResponses) //
-				.allMatch(response -> response.getStatusCode().equals(HttpStatus.OK)) //
-				.hasSize(allPlayersBefore.size() + 516);
+				.allMatch(response -> response.getStatusCode().equals(HttpStatus.OK));
 
 		softAsserts.assertAll();
 	}

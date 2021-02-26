@@ -5,13 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Random;
 
 import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.web.server.ResponseStatusException;
 
 import pkabus.comuniostatsbackend.web.dto.ClubDto;
@@ -40,9 +40,9 @@ public class PlayerControllerIntegrationTest {
 		String link = randomAlphabetic(6);
 		PlayerDto playerDto = new PlayerDto(name, link);
 		playerController.create(playerDto);
-		List<PlayerDto> byName = playerController.byName(name);
+		PagedModel<PlayerDto> byName = playerController.byName(name, 0, 20);
 
-		assertThat(byName).usingElementComparatorIgnoringFields("id").containsExactly(playerDto);
+		assertThat(byName.getContent()).usingElementComparatorIgnoringFields("id").containsExactly(playerDto);
 	}
 
 	@Test
@@ -62,9 +62,9 @@ public class PlayerControllerIntegrationTest {
 				playerDto.getLink(), new Random().nextLong(), randomAlphabetic(6), new Random().nextInt(),
 				savedClubDto.getName(), new Random().nextLong(), LocalDate.now());
 		flatPlayerSnapshotController.add(playerSnapshotDto);
-		List<PlayerSnapshotDto> byPlayerId = playerSnapshotController.byPlayerId(playerDtoByLink.getId());
+		PagedModel<PlayerSnapshotDto> byPlayerId = playerSnapshotController.byPlayerId(playerDtoByLink.getId(), 0, 20);
 
-		assertThat(byPlayerId).usingElementComparatorIgnoringFields("id", "club", "player")
+		assertThat(byPlayerId.getContent()).usingElementComparatorIgnoringFields("id", "club", "player")
 				.containsExactly(flatSnapshotToSnapshot(playerSnapshotDto));
 	}
 
@@ -95,7 +95,7 @@ public class PlayerControllerIntegrationTest {
 		String playerOneLink = randomAlphabetic(6);
 		PlayerDto playerOneDto = new PlayerDto(playerOneName, playerOneLink);
 		playerController.create(playerOneDto);
-		PlayerDto savedPlayerOneDto = playerController.byName(playerOneName).get(0);
+		PlayerDto savedPlayerOneDto = playerController.byName(playerOneName, 0, 20).getContent().iterator().next();
 
 		// create two snapshots for the same player
 		FlatPlayerSnapshotDto playerOneSnapshotDto = new FlatPlayerSnapshotDto(savedPlayerOneDto.getName(),
@@ -111,16 +111,17 @@ public class PlayerControllerIntegrationTest {
 		String playerTwoLink = randomAlphabetic(6);
 		PlayerDto playerTwoDto = new PlayerDto(playerTwoName, playerTwoLink);
 		playerController.create(playerTwoDto);
-		PlayerDto savedPlayerTwoDto = playerController.byName(playerTwoName).get(0);
+		PlayerDto savedPlayerTwoDto = playerController.byName(playerTwoName, 0, 20).getContent().iterator().next();
 
 		FlatPlayerSnapshotDto playerTwoSnapshotDto = new FlatPlayerSnapshotDto(savedPlayerTwoDto.getName(),
 				savedPlayerTwoDto.getLink(), new Random().nextLong(), randomAlphabetic(6), new Random().nextInt(),
 				savedClubDto.getName(), new Random().nextLong(), LocalDate.now().minusDays(1));
 		flatPlayerSnapshotController.add(playerTwoSnapshotDto);
 
-		List<PlayerSnapshotDto> distinctByClubName = playerSnapshotController.byClubName(clubDto.getName());
+		PagedModel<PlayerSnapshotDto> distinctByClubName = playerSnapshotController
+				.byClubNameYesterday(clubDto.getName(), 0, 20);
 
-		assertThat(distinctByClubName) //
+		assertThat(distinctByClubName.getContent()) //
 				.usingElementComparatorIgnoringFields("id", "club", "player") //
 				.containsExactlyInAnyOrder(flatSnapshotToSnapshot(playerOneSnapshotDto),
 						flatSnapshotToSnapshot(playerTwoSnapshotDto));

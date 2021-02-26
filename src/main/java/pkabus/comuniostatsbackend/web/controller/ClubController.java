@@ -1,10 +1,10 @@
 package pkabus.comuniostatsbackend.web.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,11 +36,14 @@ public class ClubController {
 	}
 
 	@GetMapping(value = "/all")
-    @CrossOrigin
-	public List<ClubDto> all() {
-		return StreamSupport.stream(clubService.findAll().spliterator(), false) //
-				.map(this::toDto) //
-				.collect(Collectors.toList());
+	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
+					// going to run! Should be a property
+	public PagedModel<ClubDto> all(@RequestParam(defaultValue = "0") final Integer page,
+			@RequestParam(defaultValue = "20") final Integer size) {
+		Page<ClubDto> clubPage = clubService.findAll(PageRequest.of(page, size)).map(this::toDto);
+
+		return PagedModel.of(clubPage.getContent(),
+				new PageMetadata(clubPage.getSize(), clubPage.getNumber(), clubPage.getTotalElements()));
 	}
 
 	@GetMapping(params = "id")

@@ -1,7 +1,9 @@
 package pkabus.comuniostatsbackend.service;
 
-import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import pkabus.comuniostatsbackend.persistence.model.PlayerEntity;
 
@@ -11,11 +13,11 @@ public interface PlayerService {
 
 	PlayerEntity save(PlayerEntity club);
 
-	List<PlayerEntity> findByName(String name);
+	Page<PlayerEntity> findByName(String name, Pageable page);
 
 	Optional<PlayerEntity> findByLink(String link);
 
-	Iterable<PlayerEntity> findAll();
+	Page<PlayerEntity> findAll(Pageable page);
 
 	void delete(PlayerEntity player);
 

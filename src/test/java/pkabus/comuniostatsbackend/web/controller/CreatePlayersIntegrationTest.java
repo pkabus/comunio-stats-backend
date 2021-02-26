@@ -48,6 +48,6 @@ public class CreatePlayersIntegrationTest {
 		playerController.create(player);
 		playerController.create(player);
 
-		assertThat(playerController.all()).usingElementComparatorIgnoringFields("id").containsExactly(player);
+		assertThat(playerController.all(0, 20)).usingElementComparatorIgnoringFields("id").containsExactly(player);
 	}
 }

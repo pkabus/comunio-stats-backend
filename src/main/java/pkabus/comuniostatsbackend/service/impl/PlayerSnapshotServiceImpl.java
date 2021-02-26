@@ -1,7 +1,6 @@
 package pkabus.comuniostatsbackend.service.impl;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -43,8 +42,8 @@ public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
 	}
 
 	@Override
-	public List<PlayerSnapshotEntity> findByClubNameAndCreated(final String name, final LocalDate date) {
-		return playerSnapshotRepo.findByClubNameAndCreated(name, date);
+	public Page<PlayerSnapshotEntity> findByClubNameAndCreated(final String name, final LocalDate date, final Pageable page) {
+		return playerSnapshotRepo.findByClubNameAndCreated(name, date, page);
 	}
 
 }

@@ -6,7 +6,6 @@ import static pkabus.comuniostatsbackend.web.controller.PlayerController.ALL;
 import static pkabus.comuniostatsbackend.web.controller.PlayerController.BASE_PLAYERS;
 import static pkabus.comuniostatsbackend.web.controller.PlayerController.CREATE;
 
-import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.core.TypeReferences.PagedModelType;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +29,12 @@ public class PlayerRestApiTest {
 
 	@Test
 	void givenPlayer_whenAll_then200Ok() {
-		ResponseEntity<List<PlayerDto>> response = restTemplate.exchange(BASE_PLAYERS + ALL, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<PlayerDto>>() {
+		ResponseEntity<PagedModel<PlayerDto>> responseList = restTemplate.exchange(BASE_PLAYERS + ALL, HttpMethod.GET,
+				null, new PagedModelType<PlayerDto>() {
 				});
 
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).isNotNull();
+		assertThat(responseList.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(responseList.getBody()).isNotNull();
 	}
 
 	@Test
@@ -48,7 +48,7 @@ public class PlayerRestApiTest {
 
 	@Test
 	void whenUnknownId_then404NotFound() {
-		ResponseEntity<?> responseUnknown = restTemplate.getForEntity(BASE_PLAYERS + "/" + new Random().nextLong(),
+		ResponseEntity<?> responseUnknown = restTemplate.getForEntity(BASE_PLAYERS + "?id=" + new Random().nextLong(),
 				Object.class);
 
 		assertThat(responseUnknown.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
@@ -56,13 +56,13 @@ public class PlayerRestApiTest {
 
 	@Test
 	void givenPlayer_whenKnownId_then200Ok() {
-		ResponseEntity<List<PlayerDto>> responseList = restTemplate.exchange(BASE_PLAYERS + ALL, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<PlayerDto>>() {
+		ResponseEntity<PagedModel<PlayerDto>> responseList = restTemplate.exchange(BASE_PLAYERS + ALL, HttpMethod.GET,
+				null, new PagedModelType<PlayerDto>() {
 				});
 
-		PlayerDto playerDto = responseList.getBody().get(0);
+		PlayerDto playerDto = responseList.getBody().getContent().iterator().next();
 
-		ResponseEntity<PlayerDto> response = restTemplate.getForEntity(BASE_PLAYERS + "/" + playerDto.getId(),
+		ResponseEntity<PlayerDto> response = restTemplate.getForEntity(BASE_PLAYERS + "?id=" + playerDto.getId(),
 				PlayerDto.class);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

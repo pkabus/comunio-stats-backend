@@ -1,14 +1,14 @@
 package pkabus.comuniostatsbackend.web.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,29 +40,44 @@ public class PlayerController {
 		this.modelMapper = modelMapper;
 	}
 
-	@GetMapping(ALL)
-	public List<PlayerDto> all() {
-		return StreamSupport.stream(playerService.findAll().spliterator(), false) //
-				.map(this::toDto) //
-				.collect(Collectors.toList());
+	@GetMapping(value = ALL)
+	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
+	// going to run! Should be a property
+	public PagedModel<PlayerDto> all(@RequestParam(defaultValue = "0") final int page,
+			@RequestParam(defaultValue = "20") final int size) {
+		PageRequest pageRequest = PageRequest.of(Integer.valueOf(page), Integer.valueOf(size));
+
+		Page<PlayerDto> playerPage = playerService.findAll(pageRequest).map(this::toDto);
+
+		return PagedModel.of(playerPage.getContent(),
+				new PageMetadata(playerPage.getSize(), playerPage.getNumber(), playerPage.getTotalElements()));
 	}
 
-	@GetMapping(value = "/{id}")
-	public PlayerDto byId(@PathVariable final Long id) {
+	@GetMapping(params = "id")
+	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
+	// going to run! Should be a property
+	public PlayerDto byId(@RequestParam final Long id) {
 		PlayerEntity playerEntity = playerService.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 		return toDto(playerEntity);
 	}
 
 	@GetMapping(params = "name")
-	public List<PlayerDto> byName(@RequestParam final String name) {
-		return playerService.findByName(name) //
-				.stream() //
-				.map(this::toDto) //
-				.collect(Collectors.toList());
+	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
+	// going to run! Should be a property
+	public PagedModel<PlayerDto> byName(@RequestParam final String name,
+			@RequestParam(defaultValue = "0") final Integer page,
+			@RequestParam(defaultValue = "20") final Integer size) {
+		Page<PlayerDto> playerPage = playerService.findByName(name, PageRequest.of(page, size)) //
+				.map(this::toDto);
+
+		return PagedModel.of(playerPage.getContent(),
+				new PageMetadata(playerPage.getSize(), playerPage.getNumber(), playerPage.getTotalElements()));
 	}
 
 	@GetMapping(params = "link")
+	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
+	// going to run! Should be a property
 	public PlayerDto byLink(@RequestParam final String link) {
 		PlayerEntity playerEntity = playerService.findByLink(link)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

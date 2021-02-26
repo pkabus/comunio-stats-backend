@@ -8,6 +8,7 @@ import org.modelmapper.PropertyMap;
 import org.modelmapper.config.Configuration.AccessLevel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.hateoas.mediatype.hal.Jackson2HalModule;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,6 +42,9 @@ public class PersistenceConfig {
 		LocalDateDeserializer localDateTimeDeserializer = new LocalDateDeserializer(
 				DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		timeModule.addDeserializer(LocalDate.class, localDateTimeDeserializer);
+
+		// to enable the PagedModel object mapping
+		objectMapper.registerModule(new Jackson2HalModule());
 
 		return objectMapper;
 	}
