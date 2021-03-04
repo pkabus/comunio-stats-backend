@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>pkabus</groupId>
 	<artifactId>comunio-stats-backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>comunio-stats-backend</name>
 	<description>Backend project for the comunio-stats super project </description>
 
