@@ -47,6 +47,8 @@ public class ClubController {
 	}
 
 	@GetMapping(params = "id")
+	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
+	// going to run! Should be a property
 	public ClubDto byId(@RequestParam final Long id) {
 		ClubEntity clubEntity = clubService.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -54,6 +56,8 @@ public class ClubController {
 	}
 
 	@GetMapping(params = "name")
+	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
+	// going to run! Should be a property
 	public ClubDto byName(@RequestParam final String name) {
 		ClubEntity clubEntity = clubService.findByName(name)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

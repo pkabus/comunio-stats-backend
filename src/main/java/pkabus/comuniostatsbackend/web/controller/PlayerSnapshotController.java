@@ -67,6 +67,29 @@ public class PlayerSnapshotController {
 		return toPagedModel(playerSnapshotPage);
 	}
 
+	@GetMapping(params = "clubId")
+	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
+	// going to run! Should be a property
+	public PagedModel<PlayerSnapshotDto> byClubIdYesterday(@RequestParam final Long clubId,
+			@RequestParam(defaultValue = "0") final Integer page,
+			@RequestParam(defaultValue = "20") final Integer size) {
+		return this.byClubIdAndDate(clubId, LocalDate.now().minusDays(1), page, size);
+	}
+
+	@GetMapping(params = { "clubId", "date" })
+	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
+	// going to run! Should be a property
+	public PagedModel<PlayerSnapshotDto> byClubIdAndDate(@RequestParam final Long clubId,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam final LocalDate date,
+			@RequestParam(defaultValue = "0") final Integer page,
+			@RequestParam(defaultValue = "20") final Integer size) {
+		PageRequest pageRequest = PageRequest.of(page, size);
+		Page<PlayerSnapshotDto> playerSnapshotPage = playerSnapshotService
+				.findByClubIdAndCreated(clubId, date, pageRequest).map(this::snapshotToDto);
+
+		return toPagedModel(playerSnapshotPage);
+	}
+
 	@GetMapping(params = "clubName")
 	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
 	// going to run! Should be a property

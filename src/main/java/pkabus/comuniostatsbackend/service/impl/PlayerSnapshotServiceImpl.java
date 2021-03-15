@@ -46,4 +46,9 @@ public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
 		return playerSnapshotRepo.findByClubNameAndCreated(name, date, page);
 	}
 
+	@Override
+	public Page<PlayerSnapshotEntity> findByClubIdAndCreated(final Long id, final LocalDate date, final Pageable page) {
+		return playerSnapshotRepo.findByClubIdAndCreated(id, date, page);
+	}
+
 }

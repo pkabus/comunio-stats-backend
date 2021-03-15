@@ -20,13 +20,13 @@ services:
       retries: 10
       
   comunio-stats-backend:
-    image: comunio-stats-backend:0.0.1-SNAPSHOT
+    image: comunio-stats-backend:1.0.0-SNAPSHOT
     restart: on-failure
     depends_on: 
       - "mysql"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/db_comunio?allowPublicKeyRetrieval=true&useSSL=false
-      - SPRING.DATASOURCE.INITIALIZATIONMODE=ALWAYS
+      - SPRING_DATASOURCE_INITIALIZATIONMODE=ALWAYS
     ports:
       - "8080:8080"
       

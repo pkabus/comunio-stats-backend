@@ -19,5 +19,7 @@ public interface PlayerSnapshotService {
 
 	Page<PlayerSnapshotEntity> findByClubNameAndCreated(String name, LocalDate date, Pageable page);
 
+	Page<PlayerSnapshotEntity> findByClubIdAndCreated(Long id, LocalDate date, Pageable page);
+
 	void deleteById(Long id);
 }
