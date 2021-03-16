@@ -69,7 +69,7 @@ public class PlayerSnapshotControllerIntegrationTest {
 
 		FlatPlayerSnapshotDto playerSnapshotZero = new FlatPlayerSnapshotDto(savedPlayerDto.getName(),
 				savedPlayerDto.getLink(), randLong + 0, randomAlphabetic(6), new Random().nextInt(),
-				savedClubDto.getName(), new Random().nextLong(), LocalDate.now().minusDays(0));
+				savedClubDto.getName(), new Random().nextLong(), LocalDate.now());
 
 		// add unordered
 		flatPlayerSnapshotController.add(playerSnapshotThree);
@@ -81,15 +81,17 @@ public class PlayerSnapshotControllerIntegrationTest {
 
 		// only return the most recent five snapshots
 		PagedModel<PlayerSnapshotDto> pagedPlayerSnapshots = playerSnapshotController //
-				.byPlayerId(savedPlayerDto.getId(), 0, 5, null);
+				.byPlayerIdAndCreatedBetween(savedPlayerDto.getId(), //
+						LocalDate.now().minusDays(4), //
+						LocalDate.now(), 0, 5, null);
 
 		// assert the order starting at the most recent entry (desc)
 		assertThat(pagedPlayerSnapshots.getContent()).map(PlayerSnapshotDto::getCreated) //
 				.isEqualTo(List.of( //
-						playerSnapshotZero.getCreated(), //
-						playerSnapshotOne.getCreated(), //
-						playerSnapshotTwo.getCreated(), //
+						playerSnapshotFour.getCreated(), //
 						playerSnapshotThree.getCreated(), //
-						playerSnapshotFour.getCreated()));
+						playerSnapshotTwo.getCreated(), //
+						playerSnapshotOne.getCreated(), //
+						playerSnapshotZero.getCreated()));
 	}
 }

@@ -29,7 +29,7 @@ public class PlayerSnapshotController {
 	public static final String CREATE = "/create";
 	public static final String DELETE = "/delete";
 
-	private static final Sort SORT_DEFAULT = Sort.by(Order.desc("created"));
+	private static final Sort SORT_DEFAULT = Sort.by(Order.asc("created"));
 
 	private final PlayerSnapshotService playerSnapshotService;
 
