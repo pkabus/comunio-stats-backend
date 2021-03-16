@@ -52,7 +52,7 @@ public class PlayerSnapshotRestApiTest {
 		PlayerDto playerDto = responseList.getBody().getContent().iterator().next();
 
 		ResponseEntity<PagedModel<PlayerSnapshotDto>> response = restTemplate.exchange(
-				BASE_PLAYERS_SNAPSHOTS + "?id=" + playerDto.getId(), HttpMethod.GET, null,
+				BASE_PLAYERS_SNAPSHOTS + "?playerId=" + playerDto.getId(), HttpMethod.GET, null,
 				new PagedModelType<PlayerSnapshotDto>() {
 				});
 
@@ -91,7 +91,7 @@ public class PlayerSnapshotRestApiTest {
 				.map(PlayerDto::getId) //
 				.map(id -> {
 					ResponseEntity<PagedModel<PlayerSnapshotDto>> playerSnapshotResponse = restTemplate.exchange(
-							BASE_PLAYERS_SNAPSHOTS + "?id=" + id, HttpMethod.GET, null,
+							BASE_PLAYERS_SNAPSHOTS + "?playerId=" + id, HttpMethod.GET, null,
 							new PagedModelType<PlayerSnapshotDto>() {
 							});
 					return playerSnapshotResponse;

@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
@@ -27,6 +29,8 @@ public class PlayerSnapshotController {
 	public static final String CREATE = "/create";
 	public static final String DELETE = "/delete";
 
+	private static final Sort SORT_DEFAULT = Sort.by(Order.desc("created"));
+
 	private final PlayerSnapshotService playerSnapshotService;
 
 	private final ModelMapper modelMapper;
@@ -37,31 +41,53 @@ public class PlayerSnapshotController {
 		this.modelMapper = modelMapper;
 	}
 
-	@GetMapping(params = { "id", "start", "end" })
+	@GetMapping(params = { "playerId", "start", "end" })
 	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
 	// going to run! Should be a property
-	public PagedModel<PlayerSnapshotDto> byPlayerIdAndCreatedBetween(@RequestParam final Long id,
+	public PagedModel<PlayerSnapshotDto> byPlayerIdAndCreatedBetween(@RequestParam final Long playerId,
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam final LocalDate start,
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam final LocalDate end,
-			@RequestParam(defaultValue = "0") final Integer page,
-			@RequestParam(defaultValue = "20") final Integer size) {
-		PageRequest pageRequest = PageRequest.of(page, size);
-		Page<PlayerSnapshotDto> playerSnapshotPage = playerSnapshotService
-				.findByPlayerIdAndCreatedBetween(id, start, end, pageRequest) //
+			@RequestParam(defaultValue = "0") final Integer page, //
+			@RequestParam(defaultValue = "20") final Integer size, //
+			@RequestParam(required = false) final Sort sort) {
+		Sort sortOrDefault = sort != null ? sort : SORT_DEFAULT;
+		PageRequest pageRequest = PageRequest.of(page, size, sortOrDefault);
+		Page<PlayerSnapshotDto> playerSnapshotPage = playerSnapshotService //
+				.findByPlayerIdAndCreatedBetween(playerId, start, end, pageRequest) //
 				.map(this::snapshotToDto);
 
 		return toPagedModel(playerSnapshotPage);
 
 	}
 
-	@GetMapping(params = "id")
+	@GetMapping(params = "playerId")
 	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
 	// going to run! Should be a property
-	public PagedModel<PlayerSnapshotDto> byPlayerId(@RequestParam final Long id,
-			@RequestParam(defaultValue = "0") final Integer page,
-			@RequestParam(defaultValue = "20") final Integer size) {
-		PageRequest pageRequest = PageRequest.of(page, size);
-		Page<PlayerSnapshotDto> playerSnapshotPage = playerSnapshotService.findByPlayerId(id, pageRequest) //
+	public PagedModel<PlayerSnapshotDto> byPlayerId(@RequestParam final Long playerId,
+			@RequestParam(defaultValue = "0") final Integer page, //
+			@RequestParam(defaultValue = "20") final Integer size, //
+			@RequestParam(required = false) final Sort sort) {
+		Sort sortOrDefault = sort != null ? sort : SORT_DEFAULT;
+		PageRequest pageRequest = PageRequest.of(page, size, sortOrDefault);
+		Page<PlayerSnapshotDto> playerSnapshotPage = playerSnapshotService //
+				.findByPlayerId(playerId, pageRequest) //
+				.map(this::snapshotToDto);
+
+		return toPagedModel(playerSnapshotPage);
+	}
+
+	@GetMapping(params = { "clubId", "date" })
+	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
+	// going to run! Should be a property
+	public PagedModel<PlayerSnapshotDto> byClubIdAndDate(@RequestParam final Long clubId,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam final LocalDate date,
+			@RequestParam(defaultValue = "0") final Integer page, //
+			@RequestParam(defaultValue = "20") final Integer size, //
+			@RequestParam(required = false) final Sort sort) {
+		Sort sortOrDefault = sort != null ? sort : SORT_DEFAULT;
+		PageRequest pageRequest = PageRequest.of(page, size, sortOrDefault);
+		Page<PlayerSnapshotDto> playerSnapshotPage = playerSnapshotService //
+				.findByClubIdAndCreated(clubId, date, pageRequest) //
 				.map(this::snapshotToDto);
 
 		return toPagedModel(playerSnapshotPage);
@@ -70,22 +96,15 @@ public class PlayerSnapshotController {
 	@GetMapping(params = "clubId")
 	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
 	// going to run! Should be a property
-	public PagedModel<PlayerSnapshotDto> byClubIdYesterday(@RequestParam final Long clubId,
-			@RequestParam(defaultValue = "0") final Integer page,
-			@RequestParam(defaultValue = "20") final Integer size) {
-		return this.byClubIdAndDate(clubId, LocalDate.now().minusDays(1), page, size);
-	}
-
-	@GetMapping(params = { "clubId", "date" })
-	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
-	// going to run! Should be a property
-	public PagedModel<PlayerSnapshotDto> byClubIdAndDate(@RequestParam final Long clubId,
-			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam final LocalDate date,
-			@RequestParam(defaultValue = "0") final Integer page,
-			@RequestParam(defaultValue = "20") final Integer size) {
-		PageRequest pageRequest = PageRequest.of(page, size);
-		Page<PlayerSnapshotDto> playerSnapshotPage = playerSnapshotService
-				.findByClubIdAndCreated(clubId, date, pageRequest).map(this::snapshotToDto);
+	public PagedModel<PlayerSnapshotDto> byClubId(@RequestParam final Long clubId,
+			@RequestParam(defaultValue = "false") final boolean mostRecentOnly,
+			@RequestParam(defaultValue = "0") final Integer page, //
+			@RequestParam(defaultValue = "20") final Integer size, //
+			@RequestParam(required = false) final Sort sort) {
+		Sort sortOrDefault = sort != null ? sort : SORT_DEFAULT;
+		PageRequest pageRequest = PageRequest.of(page, size, sortOrDefault);
+		Page<PlayerSnapshotDto> playerSnapshotPage = playerSnapshotService //
+				.findByClubId(clubId, mostRecentOnly, pageRequest).map(this::snapshotToDto);
 
 		return toPagedModel(playerSnapshotPage);
 	}
@@ -93,10 +112,17 @@ public class PlayerSnapshotController {
 	@GetMapping(params = "clubName")
 	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
 	// going to run! Should be a property
-	public PagedModel<PlayerSnapshotDto> byClubNameYesterday(@RequestParam final String clubName,
-			@RequestParam(defaultValue = "0") final Integer page,
-			@RequestParam(defaultValue = "20") final Integer size) {
-		return this.byClubNameAndDate(clubName, LocalDate.now().minusDays(1), page, size);
+	public PagedModel<PlayerSnapshotDto> byClubName(@RequestParam final String clubName,
+			@RequestParam(defaultValue = "false") final boolean mostRecentOnly,
+			@RequestParam(defaultValue = "0") final Integer page, //
+			@RequestParam(defaultValue = "20") final Integer size, //
+			@RequestParam(required = false) final Sort sort) {
+		Sort sortOrDefault = sort != null ? sort : SORT_DEFAULT;
+		PageRequest pageRequest = PageRequest.of(page, size, sortOrDefault);
+		Page<PlayerSnapshotDto> playerSnapshotPage = playerSnapshotService //
+				.findByClubName(clubName, mostRecentOnly, pageRequest).map(this::snapshotToDto);
+
+		return toPagedModel(playerSnapshotPage);
 	}
 
 	@GetMapping(params = { "clubName", "date" })
@@ -104,11 +130,13 @@ public class PlayerSnapshotController {
 	// going to run! Should be a property
 	public PagedModel<PlayerSnapshotDto> byClubNameAndDate(@RequestParam final String clubName,
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam final LocalDate date,
-			@RequestParam(defaultValue = "0") final Integer page,
-			@RequestParam(defaultValue = "20") final Integer size) {
-		PageRequest pageRequest = PageRequest.of(page, size);
+			@RequestParam(defaultValue = "0") final Integer page, //
+			@RequestParam(defaultValue = "20") final Integer size, //
+			@RequestParam(required = false) final Sort sort) {
+		Sort sortOrDefault = sort != null ? sort : SORT_DEFAULT;
+		PageRequest pageRequest = PageRequest.of(page, size, sortOrDefault);
 
-		Page<PlayerSnapshotDto> playerSnapshotPage = playerSnapshotService
+		Page<PlayerSnapshotDto> playerSnapshotPage = playerSnapshotService //
 				.findByClubNameAndCreated(clubName, date, pageRequest) //
 				.map(this::snapshotToDto);
 

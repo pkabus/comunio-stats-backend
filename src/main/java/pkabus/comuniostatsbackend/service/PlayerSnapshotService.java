@@ -19,7 +19,12 @@ public interface PlayerSnapshotService {
 
 	Page<PlayerSnapshotEntity> findByClubNameAndCreated(String name, LocalDate date, Pageable page);
 
+	Page<PlayerSnapshotEntity> findByClubName(String name, boolean mostRecentOnly, Pageable page);
+
 	Page<PlayerSnapshotEntity> findByClubIdAndCreated(Long id, LocalDate date, Pageable page);
 
+	Page<PlayerSnapshotEntity> findByClubId(Long id, boolean mostRecentOnly, Pageable page);
+
 	void deleteById(Long id);
+
 }

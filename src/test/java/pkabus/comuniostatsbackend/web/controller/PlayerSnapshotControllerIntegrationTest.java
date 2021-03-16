@@ -1,0 +1,95 @@
+package pkabus.comuniostatsbackend.web.controller;
+
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Random;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.hateoas.PagedModel;
+
+import pkabus.comuniostatsbackend.web.dto.ClubDto;
+import pkabus.comuniostatsbackend.web.dto.FlatPlayerSnapshotDto;
+import pkabus.comuniostatsbackend.web.dto.PlayerDto;
+import pkabus.comuniostatsbackend.web.dto.PlayerSnapshotDto;
+
+@SpringBootTest
+public class PlayerSnapshotControllerIntegrationTest {
+
+	@Autowired
+	private PlayerController playerController;
+
+	@Autowired
+	private ClubController clubController;
+
+	@Autowired
+	private PlayerSnapshotController playerSnapshotController;
+
+	@Autowired
+	private FlatPlayerSnapshotController flatPlayerSnapshotController;
+
+	@Test
+	void givenPlayerSnapshots_byPlayerId_assertDefaultOrder_thenSuccess() {
+		ClubDto clubDto = new ClubDto(randomAlphabetic(6));
+		clubController.create(clubDto);
+		ClubDto savedClubDto = clubController.byName(clubDto.getName());
+
+		String playerName = randomAlphabetic(6);
+		String playerLink = randomAlphabetic(6);
+		PlayerDto playerDto = new PlayerDto(playerName, playerLink);
+		playerController.create(playerDto);
+		PlayerDto savedPlayerDto = playerController.byName(playerName, 0, 20).getContent().iterator().next();
+
+		long randLong = new Random().nextLong();
+
+		// create six snapshots for the same player
+		FlatPlayerSnapshotDto playerSnapshotFive = new FlatPlayerSnapshotDto(savedPlayerDto.getName(),
+				savedPlayerDto.getLink(), randLong + 5, randomAlphabetic(6), new Random().nextInt(),
+				savedClubDto.getName(), new Random().nextLong(), LocalDate.now().minusDays(5));
+
+		FlatPlayerSnapshotDto playerSnapshotFour = new FlatPlayerSnapshotDto(savedPlayerDto.getName(),
+				savedPlayerDto.getLink(), randLong + 4, randomAlphabetic(6), new Random().nextInt(),
+				savedClubDto.getName(), new Random().nextLong(), LocalDate.now().minusDays(4));
+
+		FlatPlayerSnapshotDto playerSnapshotThree = new FlatPlayerSnapshotDto(savedPlayerDto.getName(),
+				savedPlayerDto.getLink(), randLong + 3, randomAlphabetic(6), new Random().nextInt(),
+				savedClubDto.getName(), new Random().nextLong(), LocalDate.now().minusDays(3));
+
+		FlatPlayerSnapshotDto playerSnapshotTwo = new FlatPlayerSnapshotDto(savedPlayerDto.getName(),
+				savedPlayerDto.getLink(), randLong + 2, randomAlphabetic(6), new Random().nextInt(),
+				savedClubDto.getName(), new Random().nextLong(), LocalDate.now().minusDays(2));
+
+		FlatPlayerSnapshotDto playerSnapshotOne = new FlatPlayerSnapshotDto(savedPlayerDto.getName(),
+				savedPlayerDto.getLink(), randLong + 1, randomAlphabetic(6), new Random().nextInt(),
+				savedClubDto.getName(), new Random().nextLong(), LocalDate.now().minusDays(1));
+
+		FlatPlayerSnapshotDto playerSnapshotZero = new FlatPlayerSnapshotDto(savedPlayerDto.getName(),
+				savedPlayerDto.getLink(), randLong + 0, randomAlphabetic(6), new Random().nextInt(),
+				savedClubDto.getName(), new Random().nextLong(), LocalDate.now().minusDays(0));
+
+		// add unordered
+		flatPlayerSnapshotController.add(playerSnapshotThree);
+		flatPlayerSnapshotController.add(playerSnapshotOne);
+		flatPlayerSnapshotController.add(playerSnapshotFive);
+		flatPlayerSnapshotController.add(playerSnapshotTwo);
+		flatPlayerSnapshotController.add(playerSnapshotZero);
+		flatPlayerSnapshotController.add(playerSnapshotFour);
+
+		// only return the most recent five snapshots
+		PagedModel<PlayerSnapshotDto> pagedPlayerSnapshots = playerSnapshotController //
+				.byPlayerId(savedPlayerDto.getId(), 0, 5, null);
+
+		// assert the order starting at the most recent entry (desc)
+		assertThat(pagedPlayerSnapshots.getContent()).map(PlayerSnapshotDto::getCreated) //
+				.isEqualTo(List.of( //
+						playerSnapshotZero.getCreated(), //
+						playerSnapshotOne.getCreated(), //
+						playerSnapshotTwo.getCreated(), //
+						playerSnapshotThree.getCreated(), //
+						playerSnapshotFour.getCreated()));
+	}
+}

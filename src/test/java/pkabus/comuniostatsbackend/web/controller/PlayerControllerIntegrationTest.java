@@ -62,7 +62,7 @@ public class PlayerControllerIntegrationTest {
 				playerDto.getLink(), new Random().nextLong(), randomAlphabetic(6), new Random().nextInt(),
 				savedClubDto.getName(), new Random().nextLong(), LocalDate.now());
 		flatPlayerSnapshotController.add(playerSnapshotDto);
-		PagedModel<PlayerSnapshotDto> byPlayerId = playerSnapshotController.byPlayerId(playerDtoByLink.getId(), 0, 20);
+		PagedModel<PlayerSnapshotDto> byPlayerId = playerSnapshotController.byPlayerId(playerDtoByLink.getId(), 0, 20, null);
 
 		assertThat(byPlayerId.getContent()).usingElementComparatorIgnoringFields("id", "club", "player")
 				.containsExactly(flatSnapshotToSnapshot(playerSnapshotDto));
@@ -119,7 +119,7 @@ public class PlayerControllerIntegrationTest {
 		flatPlayerSnapshotController.add(playerTwoSnapshotDto);
 
 		PagedModel<PlayerSnapshotDto> distinctByClubName = playerSnapshotController
-				.byClubNameYesterday(clubDto.getName(), 0, 20);
+				.byClubNameAndDate(clubDto.getName(), LocalDate.now().minusDays(1), 0, 20, null);
 
 		assertThat(distinctByClubName.getContent()) //
 				.usingElementComparatorIgnoringFields("id", "club", "player") //

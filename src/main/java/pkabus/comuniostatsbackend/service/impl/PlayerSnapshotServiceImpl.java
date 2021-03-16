@@ -4,7 +4,10 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 
 import pkabus.comuniostatsbackend.persistence.model.PlayerSnapshotEntity;
@@ -42,13 +45,47 @@ public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
 	}
 
 	@Override
-	public Page<PlayerSnapshotEntity> findByClubNameAndCreated(final String name, final LocalDate date, final Pageable page) {
+	public Page<PlayerSnapshotEntity> findByClubNameAndCreated(final String name, final LocalDate date,
+			final Pageable page) {
 		return playerSnapshotRepo.findByClubNameAndCreated(name, date, page);
 	}
 
 	@Override
 	public Page<PlayerSnapshotEntity> findByClubIdAndCreated(final Long id, final LocalDate date, final Pageable page) {
 		return playerSnapshotRepo.findByClubIdAndCreated(id, date, page);
+	}
+
+	@Override
+	public Page<PlayerSnapshotEntity> findByClubId(final Long id, final boolean mostRecentOnly, final Pageable page) {
+		if (mostRecentOnly) {
+			Page<PlayerSnapshotEntity> findMostRecent100 = playerSnapshotRepo.findByClubId(id,
+					PageRequest.of(0, 100, Sort.by(Order.desc("created"))));
+			if (findMostRecent100.getTotalElements() > 0 //
+					&& findMostRecent100.getContent().get(0).getCreated() != null) {
+				LocalDate wantedDate = findMostRecent100.getContent().get(0).getCreated();
+				return this.findByClubIdAndCreated(id, wantedDate, page);
+			}
+		}
+
+		// if not only most recent entities, simply use default repo functionality
+		return playerSnapshotRepo.findByClubId(id, page);
+	}
+
+	@Override
+	public Page<PlayerSnapshotEntity> findByClubName(final String name, final boolean mostRecentOnly,
+			final Pageable page) {
+		if (mostRecentOnly) {
+			Page<PlayerSnapshotEntity> findMostRecent100 = playerSnapshotRepo.findByClubName(name,
+					PageRequest.of(0, 100, Sort.by(Order.desc("created"))));
+			if (findMostRecent100.getTotalElements() > 0 //
+					&& findMostRecent100.getContent().get(0).getCreated() != null) {
+				LocalDate wantedDate = findMostRecent100.getContent().get(0).getCreated();
+				return this.findByClubNameAndCreated(name, wantedDate, page);
+			}
+		}
+
+		// if not only most recent entities, simply use default repo functionality
+		return playerSnapshotRepo.findByClubName(name, page);
 	}
 
 }
