@@ -20,7 +20,7 @@ services:
       retries: 10
       
   comunio-stats-backend:
-    image: comunio-stats-backend:1.0.0-SNAPSHOT
+    image: pkabus/comunio-stats-backend:1.0.0-SNAPSHOT
     restart: on-failure
     depends_on: 
       - "mysql"
