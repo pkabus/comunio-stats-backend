@@ -1,10 +1,10 @@
 package pkabus.comuniostatsbackend.persistence.repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,7 +18,7 @@ public interface PlayerSnapshotRepository extends JpaRepository<PlayerSnapshotEn
 
 	Page<PlayerSnapshotEntity> findByCreatedBetween(LocalDate start, LocalDate end, Pageable pageable);
 
-	Page<PlayerSnapshotEntity> findByCreatedLessThan(LocalDate date, Pageable pageable);
+	List<PlayerSnapshotEntity> findByCreatedLessThan(LocalDate date);
 
 	Page<PlayerSnapshotEntity> findByPlayerIdAndCreatedBetween(Long id, LocalDate start, LocalDate end,
 			Pageable pageable);

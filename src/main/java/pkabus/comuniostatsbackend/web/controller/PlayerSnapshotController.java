@@ -150,11 +150,11 @@ public class PlayerSnapshotController {
 		playerSnapshotService.deleteById(id);
 	}
 
-	@DeleteMapping(value = DELETE, params = "date")
+	@DeleteMapping(value = DELETE, params = "beforeDate")
 	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
 	// going to run! Should be a property
-	public void deleteBeforeDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate date) {
-		playerSnapshotService.deleteBeforeDate(date);
+	public void deleteBeforeDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate beforeDate) {
+		playerSnapshotService.deleteBeforeDate(beforeDate);
 	}
 
 	private PagedModel<PlayerSnapshotDto> toPagedModel(final Page<PlayerSnapshotDto> page) {

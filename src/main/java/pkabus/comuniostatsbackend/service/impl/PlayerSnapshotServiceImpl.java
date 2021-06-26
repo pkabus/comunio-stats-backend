@@ -1,6 +1,7 @@
 package pkabus.comuniostatsbackend.service.impl;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -101,8 +102,7 @@ public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
 
 	@Override
 	public void deleteBeforeDate(final LocalDate date) {
-		Page<PlayerSnapshotEntity> playerSnapshots = playerSnapshotRepo.findByCreatedLessThan(date,
-				PageRequest.of(0, 100));
+		List<PlayerSnapshotEntity> playerSnapshots = playerSnapshotRepo.findByCreatedLessThan(date);
 		playerSnapshotRepo.deleteInBatch(playerSnapshots);
 		log.info("Deleted player snapshots before " + date);
 	}
