@@ -45,7 +45,14 @@ public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
 
 	@Override
 	public void deleteById(final Long id) {
-		playerSnapshotRepo.deleteById(id);
+		Optional<PlayerSnapshotEntity> byId = playerSnapshotRepo.findById(id);
+
+		if (byId.isEmpty()) {
+			log.warn("No player snapshot found with id: " + id);
+			return;
+		}
+			playerSnapshotRepo.delete(byId.get());
+			log.info("Deleted player snapshot with id: " + id);
 	}
 
 	@Override
