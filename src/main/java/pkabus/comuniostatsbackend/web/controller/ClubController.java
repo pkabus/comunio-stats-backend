@@ -1,8 +1,13 @@
 package pkabus.comuniostatsbackend.web.controller;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.http.HttpStatus;
@@ -33,6 +38,20 @@ public class ClubController {
 		super();
 		this.clubService = clubService;
 		this.modelMapper = modelMapper;
+	}
+
+	@GetMapping(value = "/byDate")
+	@CrossOrigin // to enable frontend requests on same host, TODO set domain where frontend is
+	// going to run! Should be a property
+	public List<ClubDto> ofDate(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) //
+	@RequestParam final LocalDate date) {
+		LocalDate dateOrNow = date != null ? date : LocalDate.now();
+		List<ClubDto> clubList = clubService.findAllOfDate(dateOrNow) //
+				.stream() //
+				.map(this::toDto) //
+				.collect(Collectors.toList());
+
+		return clubList;
 	}
 
 	@GetMapping(value = "/all")
