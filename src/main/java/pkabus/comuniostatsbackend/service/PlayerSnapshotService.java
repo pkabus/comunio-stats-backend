@@ -27,4 +27,6 @@ public interface PlayerSnapshotService {
 
 	void deleteById(Long id);
 
+	void deleteBeforeDate(LocalDate date);
+
 }

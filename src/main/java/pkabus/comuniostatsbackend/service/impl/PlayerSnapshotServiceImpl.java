@@ -3,6 +3,8 @@ package pkabus.comuniostatsbackend.service.impl;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,8 @@ import pkabus.comuniostatsbackend.service.PlayerSnapshotService;
 
 @Service
 public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
+
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private final PlayerSnapshotRepository playerSnapshotRepo;
 
@@ -86,6 +90,14 @@ public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
 
 		// if not only most recent entities, simply use default repo functionality
 		return playerSnapshotRepo.findByClubName(name, page);
+	}
+
+	@Override
+	public void deleteBeforeDate(final LocalDate date) {
+		Page<PlayerSnapshotEntity> playerSnapshots = playerSnapshotRepo.findByCreatedLessThan(date,
+				PageRequest.of(0, 100));
+		playerSnapshotRepo.deleteInBatch(playerSnapshots);
+		log.info("Deleted player snapshots before " + date);
 	}
 
 }
