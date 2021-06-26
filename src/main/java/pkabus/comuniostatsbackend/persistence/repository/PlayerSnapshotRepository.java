@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,6 +18,8 @@ public interface PlayerSnapshotRepository extends JpaRepository<PlayerSnapshotEn
 
 	Page<PlayerSnapshotEntity> findByCreatedBetween(LocalDate start, LocalDate end, Pageable pageable);
 
+	Page<PlayerSnapshotEntity> findByCreatedLessThan(LocalDate date, Pageable pageable);
+
 	Page<PlayerSnapshotEntity> findByPlayerIdAndCreatedBetween(Long id, LocalDate start, LocalDate end,
 			Pageable pageable);
 
@@ -29,5 +32,6 @@ public interface PlayerSnapshotRepository extends JpaRepository<PlayerSnapshotEn
 	Page<PlayerSnapshotEntity> findByClubId(Long id, Pageable page);
 
 	Page<PlayerSnapshotEntity> findByClubIdAndCreated(Long id, LocalDate date, Pageable page);
+
 
 }

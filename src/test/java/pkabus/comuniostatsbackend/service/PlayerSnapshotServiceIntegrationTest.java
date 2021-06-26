@@ -135,4 +135,35 @@ public class PlayerSnapshotServiceIntegrationTest {
 		assertThat(result.getContent()).usingElementComparatorIgnoringFields("id") //
 				.containsExactlyInAnyOrderElementsOf(List.of(entityNow0, entityNow1, entityYesterday0));
 	}
+
+
+	@Test
+	void deleteBeforeDate_thenSuccess() {
+		PlayerEntity playerEntity0 = new PlayerEntity(randomAlphabetic(6), randomAlphabetic(6));
+		PlayerEntity playerEntity1 = new PlayerEntity(randomAlphabetic(6), randomAlphabetic(6));
+		ClubEntity clubEntity = new ClubEntity(new Random().nextLong(), randomAlphabetic(6));
+
+		PlayerSnapshotEntity entityNow0 = new PlayerSnapshotEntity(playerEntity0, clubEntity, Long.valueOf(160000),
+				Integer.valueOf(0), LocalDate.now(), randomAlphabetic(6));
+		flatPlayerSnapshotService.getOrSave(entityNow0);
+
+		PlayerSnapshotEntity entityYesterday0 = new PlayerSnapshotEntity(playerEntity1, clubEntity, Long.valueOf(160000),
+				Integer.valueOf(0), LocalDate.now().minusDays(1), randomAlphabetic(6));
+		flatPlayerSnapshotService.getOrSave(entityYesterday0);
+
+		PlayerSnapshotEntity entityYesterday1 = new PlayerSnapshotEntity(playerEntity0, clubEntity,
+				Long.valueOf(160000), Integer.valueOf(0), LocalDate.now().minusDays(1), randomAlphabetic(6));
+		flatPlayerSnapshotService.getOrSave(entityYesterday1);
+
+		Optional<ClubEntity> savedClub = clubService.findByName(clubEntity.getName());
+		assertThat(savedClub).isPresent();
+
+		playerSnapshotService.deleteBeforeDate(LocalDate.now());
+
+		Page<PlayerSnapshotEntity> result = playerSnapshotService.findByClubId(savedClub.get().getId(), false,
+				PageRequest.of(0, 20));
+
+		assertThat(result.getContent()).usingElementComparatorIgnoringFields("id") //
+				.containsExactly(entityNow0);
+	}
 }

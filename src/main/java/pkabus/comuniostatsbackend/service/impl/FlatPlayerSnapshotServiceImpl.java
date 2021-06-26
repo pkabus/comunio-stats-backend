@@ -37,7 +37,7 @@ public class FlatPlayerSnapshotServiceImpl implements FlatPlayerSnapshotService 
 
 	private PlayerSnapshotEntity save(final PlayerSnapshotEntity playerSnapshot) {
 		log.info("Save snapshot for " + playerSnapshot.getPlayer());
-		return playerSnapshotRepo.saveAndFlush(playerSnapshot);
+		return playerSnapshotRepo.saveAndFlush(playerSnapshot); // saveAndFlush can be rolled back to save
 	}
 
 	@Override
