@@ -16,8 +16,11 @@ then
     docker build -f $PATH_REPO/Dockerfile.piprod -t pi/comunio-stats-backend:$VERSION .
 
     # stop running container with given name
-    docker stop comunio-stats-backend
+    if [ -e "$(docker container ls -f name=comunio-stats-backend)" ]
+    then
+        docker stop comunio-stats-backend
+    fi
 
     # run pi production docker container
-    docker run -itd --rm --name comunio-stats-backend -e SPRING_PROFILES_ACTIVE='hybriddocker' -p 8080:8080 pi/comunio-stats-backend:$VERSION
+    docker run -itd --rm --network=host --name comunio-stats-backend -e SPRING_PROFILES_ACTIVE='hybriddocker' pi/comunio-stats-backend:$VERSION
 fi
