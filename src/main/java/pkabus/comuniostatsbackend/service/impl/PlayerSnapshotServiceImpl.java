@@ -103,7 +103,7 @@ public class PlayerSnapshotServiceImpl implements PlayerSnapshotService {
 	@Override
 	public void deleteBeforeDate(final LocalDate date) {
 		List<PlayerSnapshotEntity> playerSnapshots = playerSnapshotRepo.findByCreatedLessThan(date);
-		playerSnapshotRepo.deleteInBatch(playerSnapshots);
+		playerSnapshotRepo.deleteAll(playerSnapshots);
 		log.info("Deleted player snapshots before " + date);
 	}
 
